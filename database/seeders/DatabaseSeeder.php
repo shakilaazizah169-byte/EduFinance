@@ -13,5 +13,12 @@ class DatabaseSeeder extends Seeder
             KategoriSeeder::class,
             KodeTransaksiSeeder::class,
         ]);
+
+        // 🔥 SEEDER UNTUK DEMO (HANYA DI LOCAL)
+        if (app()->environment('local')) {
+            $this->call([
+                DemoAdminSeeder::class,    // Demo admin dengan lisensi + data lengkap
+            ]);
+        }
     }
 }
