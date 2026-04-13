@@ -1,0 +1,18 @@
+/* ==== FIX SIDEBAR DURALUX LARAVEL ==== */
+
+@media (min-width: 992px) {
+    .main-panel {
+        margin-left: 260px !important;
+        width: calc(100% - 260px) !important;
+    }
+
+    .content-wrapper {
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    .page-body-wrapper {
+        display: flex;
+        flex-direction: row;
+    }
+}
