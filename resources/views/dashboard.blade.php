@@ -181,6 +181,17 @@
     border-color: rgba(23, 162, 184, 0.2);
     color: #0c5460;
 }
+
+@media (max-width: 576px) {
+    .page-header-title {
+        border-right: none !important;
+        margin-right: 0 !important;
+        padding-right: 0 !important;
+    }
+    .page-header-title h5 {
+        margin-bottom: 5px !important;
+    }
+}
 </style>
 @endpush
 
@@ -189,32 +200,14 @@
 <div class="nxl-content">
     <!-- Page Header -->
     <div class="page-header">
-        <div class="page-header-left d-flex align-items-center">
+        <div class="page-header-left d-flex align-items-center flex-wrap">
             <div class="page-header-title">
-                <h5 class="m-b-10">Dashboard Keuangan Instansi</h5>
+                <h5 class="m-b-10 mb-0">Dashboard Keuangan Instansi</h5>
             </div>
-            <ul class="breadcrumb">
+            <ul class="breadcrumb mb-0">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
                 <li class="breadcrumb-item">Dashboard</li>
             </ul>
-        </div>
-        <div class="page-header-right ms-auto">
-            <div class="page-header-right-items">
-                <div class="d-flex d-md-none">
-                    <a href="javascript:void(0)" class="page-header-right-close-toggle">
-                        <i class="feather-arrow-left me-2"></i>
-                        <span>Back</span>
-                    </a>
-                </div>
-                <div class="d-flex align-items-center gap-2 page-header-right-items-wrapper">
-
-                </div>
-            </div>
-            <div class="d-md-none d-flex align-items-center">
-                <a href="javascript:void(0)" class="page-header-right-open-toggle">
-                    <i class="feather-align-right fs-20"></i>
-                </a>
-            </div>
         </div>
     </div>
 
@@ -586,21 +579,21 @@
                     <div class="card-body">
                         <div id="chartMutasi"></div>
                         <div class="row mt-4 text-center">
-                            <div class="col-4">
+                            <div class="col-md-4 col-12 mb-3 mb-md-0">
                                 <div class="p-3 bg-soft-success rounded">
                                     <i class="feather-arrow-down-circle fs-4 text-success mb-2"></i>
                                     <h5 class="mb-1">Rp {{ number_format($stats['total_mutasi_debit'] ?? 0, 0, ',', '.') }}</h5>
                                     <small class="text-muted">Total Pemasukan</small>
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-md-4 col-12 mb-3 mb-md-0">
                                 <div class="p-3 bg-soft-danger rounded">
                                     <i class="feather-arrow-up-circle fs-4 text-danger mb-2"></i>
                                     <h5 class="mb-1">Rp {{ number_format($stats['total_mutasi_kredit'] ?? 0, 0, ',', '.') }}</h5>
                                     <small class="text-muted">Total Pengeluaran</small>
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-md-4 col-12">
                                 @php $netCashFlow = ($stats['total_mutasi_debit'] ?? 0) - ($stats['total_mutasi_kredit'] ?? 0); @endphp
                                 <div class="p-3 bg-soft-{{ $netCashFlow >= 0 ? 'primary' : 'warning' }} rounded">
                                     <i class="feather-activity fs-4 text-{{ $netCashFlow >= 0 ? 'primary' : 'warning' }} mb-2"></i>
@@ -683,21 +676,21 @@
                     <div class="card-body">
                         <div id="chartMultiMetric"></div>
                         <div class="row mt-4 text-center">
-                            <div class="col-4">
+                            <div class="col-md-4 col-12 mb-3 mb-md-0">
                                 <div class="p-3 bg-soft-primary rounded">
                                     <i class="feather-target fs-4 text-primary mb-2"></i>
                                     <h6 class="mb-1">Planning</h6>
                                     <small class="text-muted">Total Kegiatan</small>
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-md-4 col-12 mb-3 mb-md-0">
                                 <div class="p-3 bg-soft-success rounded">
                                     <i class="feather-arrow-down-circle fs-4 text-success mb-2"></i>
                                     <h6 class="mb-1">Income</h6>
                                     <small class="text-muted">Pemasukan</small>
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-md-4 col-12">
                                 <div class="p-3 bg-soft-danger rounded">
                                     <i class="feather-arrow-up-circle fs-4 text-danger mb-2"></i>
                                     <h6 class="mb-1">Expense</h6>

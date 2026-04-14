@@ -6,11 +6,11 @@
 <div class="nxl-content">
     <!-- page header -->
     <div class="page-header">
-        <div class="page-header-left d-flex align-items-center">
+        <div class="page-header-left d-flex align-items-center flex-wrap">
             <div class="page-header-title">
-                <h5 class="m-b-10">Kategori</h5>
+                <h5 class="m-b-10 mb-0">Kategori</h5>
             </div>
-            <ul class="breadcrumb">
+            <ul class="breadcrumb mb-0">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
                 <li class="breadcrumb-item active">Kategori</li>
             </ul>
@@ -44,14 +44,14 @@
     <!-- main content -->
     <div class="main-content">
         <!-- statistics cards -->
-        <div class="row g-4 mb-4">
+        <div class="row g-3 mb-4">
             <div class="col-sm-6 col-xl-3">
                 <div class="card stat-card">
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="flex-grow-1">
-                                <h2 class="stat-value text-primary mb-1">{{ number_format($kategori->total(), 0, ',', '.') }}</h2>
-                                <p class="stat-label text-muted mb-0">Total Kategori</p>
+                                <h2 class="stat-value text-primary mb-0" style="line-height: 1;">{{ number_format($kategori->total(), 0, ',', '.') }}</h2>
+                                <p class="stat-label text-muted mb-0 mt-1">Total Kategori</p>
                             </div>
                             <div class="stat-icon bg-primary-soft text-primary">
                                 <i class="feather-tag"></i>
@@ -65,8 +65,8 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="flex-grow-1">
-                                <h2 class="stat-value text-success mb-1">{{ number_format($totalPenerimaan ?? 0, 0, ',', '.') }}</h2>
-                                <p class="stat-label text-muted mb-0">Kategori Penerimaan</p>
+                                <h2 class="stat-value text-success mb-0" style="line-height: 1;">{{ number_format($totalPenerimaan ?? 0, 0, ',', '.') }}</h2>
+                                <p class="stat-label text-muted mb-0 mt-1">Kategori Penerimaan</p>
                             </div>
                             <div class="stat-icon bg-success-soft text-success">
                                 <i class="feather-arrow-down-circle"></i>
@@ -80,8 +80,8 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="flex-grow-1">
-                                <h2 class="stat-value text-danger mb-1">{{ number_format($totalPengeluaran ?? 0, 0, ',', '.') }}</h2>
-                                <p class="stat-label text-muted mb-0">Kategori Pengeluaran</p>
+                                <h2 class="stat-value text-danger mb-0" style="line-height: 1;">{{ number_format($totalPengeluaran ?? 0, 0, ',', '.') }}</h2>
+                                <p class="stat-label text-muted mb-0 mt-1">Kategori Pengeluaran</p>
                             </div>
                             <div class="stat-icon bg-danger-soft text-danger">
                                 <i class="feather-arrow-up-circle"></i>
@@ -95,8 +95,8 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="flex-grow-1">
-                                <h2 class="stat-value text-warning mb-1">{{ number_format($totalKode ?? 0, 0, ',', '.') }}</h2>
-                                <p class="stat-label text-muted mb-0">Total Kode Transaksi</p>
+                                <h2 class="stat-value text-warning mb-0" style="line-height: 1;">{{ number_format($totalKode ?? 0, 0, ',', '.') }}</h2>
+                                <p class="stat-label text-muted mb-0 mt-1">Total Kode Transaksi</p>
                             </div>
                             <div class="stat-icon bg-warning-soft text-warning">
                                 <i class="feather-hash"></i>
@@ -139,7 +139,7 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="col-md-3 d-flex align-items-end">
+                        <div class="col-md-3 d-flex align-items-end mt-2 mt-md-0 pt-1 pt-md-0">
                             <div class="d-flex gap-2 w-100">
                                 <button type="submit" class="btn btn-primary w-100">
                                     <i class="feather-search me-1"></i>Cari
@@ -189,11 +189,11 @@
                     <table class="table table-hover mb-0">
                         <thead>
                             <tr>
-                                <th style="width: 35%">NAMA KATEGORI</th>
-                                <th style="width: 20%">JUMLAH KODE</th>
-                                <th style="width: 20%">TOTAL TRANSAKSI</th>
-                                <th style="width: 20%">DIBUAT</th>
-                                <th style="width: 15%" class="text-end">AKSI</th>
+                                <th style="width: 35%; min-width: 250px;">NAMA KATEGORI</th>
+                                <th style="width: 20%; min-width: 150px;">JUMLAH KODE</th>
+                                <th style="width: 20%; min-width: 150px;">TOTAL TRANSAKSI</th>
+                                <th style="width: 20%; min-width: 150px;">DIBUAT</th>
+                                <th style="width: 15%; min-width: 100px;" class="text-end">AKSI</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -813,7 +813,7 @@
    ============================================ */
 @media (max-width: 768px) {
     .stat-card .card-body {
-        padding: 1rem;
+        padding: 0.875rem 1rem;
     }
 
     .stat-value {

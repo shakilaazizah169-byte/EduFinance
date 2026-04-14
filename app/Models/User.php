@@ -42,11 +42,22 @@ class User extends Authenticatable
         return $this->hasMany(MutasiKas::class);
     }
 
-    // ── License & Payment ─────────────────────────────────────
-
+    /**
+     * Relasi ke tabel licenses (satu user punya satu lisensi aktif)
+     * 
+     * Perhatikan: Ini hasOne, bukan hasMany, karena kita hanya butuh 1 lisensi aktif
+     */
     public function license()
     {
-        return $this->hasOne(License::class)->where('status', 'active');
+        return $this->hasOne(License::class)->where('status', 'active')->latest();
+    }
+
+    /**
+     * Ambil semua lisensi user (riwayat)
+     */
+    public function allLicenses()
+    {
+        return $this->hasMany(License::class)->orderBy('created_at', 'desc');
     }
 
     public function activeLicense()
@@ -82,26 +93,21 @@ class User extends Authenticatable
     }
 
     /**
-     * Cek apakah lisensi user sudah expired
+     * Cek apakah user memiliki lisensi aktif
      */
-    public function isLicenseExpired(): bool
+
+    /**
+     * Get the user's active license from licenses table
+     */
+    public function getActiveLicense()
     {
-        // Jika status never atau tidak punya expired_at
-        if ($this->lisensi_status === 'never' || !$this->lisensi_expired_at) {
-            return true;
-        }
-        
-        // Jika status expired dari sistem
-        if ($this->lisensi_status === 'expired') {
-            return true;
-        }
-        
-        // Cek berdasarkan tanggal
-        return now()->gte($this->lisensi_expired_at);
+        return $this->license()->where('status', 'active')
+            ->where('end_date', '>=', now())
+            ->first();
     }
 
     /**
-     * Cek apakah user memiliki lisensi aktif
+     * Cek apakah user memiliki lisensi aktif (dari tabel licenses)
      */
     public function hasActiveLicense(): bool
     {
@@ -110,22 +116,58 @@ class User extends Authenticatable
             return true;
         }
         
-        // Cek status dan tanggal
-        return $this->lisensi_status === 'active' 
-            && $this->lisensi_expired_at 
-            && now()->lt($this->lisensi_expired_at);
+        // 🔥 AMBIL DARI RELASI LICENSE, BUKAN DARI KOLOM lisensi_status
+        $license = $this->license()
+            ->where('status', 'active')
+            ->where('end_date', '>=', now())
+            ->first();
+        
+        return $license !== null;
     }
 
     /**
-     * Get remaining days of license
+     * Cek apakah lisensi user sudah expired
+     */
+    public function isLicenseExpired(): bool
+    {
+        // Super admin tidak pernah expired
+        if ($this->role === 'super_admin') {
+            return false;
+        }
+        
+        // 🔥 CEK DARI TABEL LICENSES
+        $license = $this->license()
+            ->where('status', 'active')
+            ->first();
+        
+        if (!$license) {
+            return true;
+        }
+        
+        return now()->gt($license->end_date);
+    }
+
+    /**
+     * Get remaining days of license (dari tabel licenses)
      */
     public function getLicenseDaysLeft(): int
     {
-        if (!$this->hasActiveLicense() || !$this->lisensi_expired_at) {
+        $license = $this->getActiveLicense();
+        
+        if (!$license) {
             return 0;
         }
         
-        return (int) now()->diffInDays($this->lisensi_expired_at, false);
+        return (int) now()->diffInDays($license->end_date, false);
+    }
+
+    /**
+     * Get license end date
+     */
+    public function getLicenseEndDate()
+    {
+        $license = $this->getActiveLicense();
+        return $license ? $license->end_date : null;
     }
 
 }

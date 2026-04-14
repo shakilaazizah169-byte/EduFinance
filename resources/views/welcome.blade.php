@@ -566,6 +566,8 @@
         .reveal.visible, .reveal-left.visible { opacity: 1; transform: translate(0); transition: opacity .85s var(--ease-out), transform .85s var(--ease-out); }
 
         /* ── RESPONSIVE ──────────────────────────────────────────── */
+        html, body { overflow-x: hidden; max-width: 100%; }
+
         @media (max-width: 1024px) {
             nav { width: calc(100% - 48px); }
             #fitur, #testimonial, #pricing, #faq { padding: 80px 32px; }
@@ -593,78 +595,91 @@
             .nav-divider { display: none; }
             
             .hero {
-                padding: 0 20px 48px;
-                min-height: 520px;
+                padding: 100px 20px 48px;
+                min-height: 100vh;
+                justify-content: center;
             }
             .hero-h1 {
-                font-size: clamp(32px, 7vw, 64px);
+                font-size: clamp(36px, 9vw, 64px);
+                margin-bottom: 24px;
+                word-break: break-word;
+            }
+            .hero-bg { background: linear-gradient(160deg, #0d1b35 0%, #0a1528 100%); } /* simplify on mobile */
+            .hero-orb { display: none; } /* Remove large absolute element on mobile to prevent overflow */
+            .hero-badge {
+                position: relative;
+                top: auto;
+                left: auto;
+                transform: none !important;
+                display: inline-flex;
                 margin-bottom: 24px;
             }
-            .hero-badge {
-                left: 20px;
-                top: 72px;
-                font-size: 9px;
-                padding: 4px 10px;
-            }
-            .hero-floating-num {
-                right: 20px;
-                top: 72px;
-                font-size: 10px;
-            }
-            .hero-floating-n { font-size: 48px; }
+            .hero-floating-num { display: none; }
             .hero-desc {
-                font-size: 14px;
+                font-size: 14.5px;
                 max-width: 100%;
-                margin-bottom: 16px;
+                margin-bottom: 24px;
             }
             .hero-bottom {
                 flex-direction: column;
                 align-items: flex-start;
+                opacity: 1 !important; /* GSAP fallback */
             }
             .hero-actions {
                 width: 100%;
                 flex-direction: column;
-                gap: 12px;
+                gap: 16px;
             }
             .btn-primary, .btn-ghost-hero {
                 width: 100%;
                 text-align: center;
+                justify-content: center;
             }
-            .btn-primary { padding: 12px 20px; font-size: 13px; }
+            .btn-primary { padding: 14px 20px; font-size: 14.5px; }
             .hero-scroll { display: none; }
 
-            .features-grid, .testi-grid, .pricing-grid { grid-template-columns: 1fr; }
-            .feat { padding: 24px 18px; }
-            .feat-title { font-size: 16px; }
-            .testi { padding: 28px 18px; }
-            .price-card { padding: 24px 18px; }
+            .features-grid, .testi-grid, .pricing-grid { 
+                grid-template-columns: 1fr; 
+                gap: 16px; 
+                background: transparent; 
+                border: none; 
+            }
+            .feat, .testi, .price-card { 
+                padding: 32px 24px; 
+                border-radius: 12px; 
+                border: 1px solid var(--border);
+            }
+            .feat-title { font-size: 20px; }
 
+            .feat { background: var(--white); }
+            .testi { background: #0f1c34; border-color: rgba(255,255,255,.06); }
+            
             .stats-bar { flex-direction: column; }
-            .stat-block { border-right: none; border-bottom: 1px solid rgba(255,255,255,.1); }
+            .stat-block { border-right: none; border-bottom: 1px solid rgba(255,255,255,.1); padding: 32px 24px; }
             .stat-block:last-child { border-bottom: none; }
-            .stat-n { font-size: clamp(24px, 5vw, 40px); }
+            .stat-n { font-size: clamp(36px, 8vw, 48px); }
 
             .schools-header { padding: 0 20px; }
-            .school-card { width: 150px; }
+            .school-card { width: 180px; }
 
-            #fitur, #testimonial, #pricing, #faq { padding: 60px 20px; }
-            #kolaborasi { padding: 60px 0; }
-            #cta-finale { padding: 50px 20px; }
+            #fitur, #testimonial, #pricing, #faq { padding: 80px 20px; }
+            #kolaborasi { padding: 80px 0; }
+            #cta-finale { padding: 80px 20px; }
 
-            .section-h2 { font-size: clamp(28px, 6vw, 52px); }
-            .cta-h2 { font-size: clamp(28px, 6vw, 56px); }
+            .section-h2 { font-size: clamp(32px, 8vw, 52px); }
+            .cta-h2 { font-size: clamp(32px, 8vw, 56px); }
 
-            .features-header, .pricing-header { flex-direction: column; gap: 20px; }
+            .features-header, .pricing-header { flex-direction: column; gap: 20px; align-items: flex-start; }
             .features-sub, .pricing-note { max-width: 100%; }
             .faq-layout { grid-template-columns: 1fr; gap: 40px; }
             .faq-sticky { position: static; }
 
-            .footer-top { flex-direction: column; gap: 24px; }
-            .footer-links { gap: 32px; flex-wrap: wrap; }
-            footer { padding: 40px 20px 20px; }
+            .footer-top { flex-direction: column; gap: 32px; }
+            .footer-links { gap: 40px; flex-wrap: wrap; flex-direction: row; }
+            footer { padding: 48px 20px 24px; }
 
-            .trust-strip { padding: 20px; gap: 16px; flex-direction: column; }
-            .trust-item { font-size: 12px; }
+            .trust-strip { padding: 24px 20px; gap: 16px; flex-direction: column; align-items: flex-start; }
+            .trust-item { font-size: 13px; }
 
             .wa-float { bottom: 20px; right: 20px; }
         }
@@ -673,117 +688,88 @@
             nav {
                 width: calc(100% - 16px);
                 height: 52px;
-                padding: 0 4px 0 8px;
+                padding: 0 12px;
                 top: 8px;
             }
-            .nav-logo-img { height: 18px; }
-            .nav-logo-text { font-size: 12px; }
-            .nav-cta { padding: 7px 14px !important; font-size: 11px !important; }
+            .nav-logo-img { height: 20px; }
+            .nav-logo-text { font-size: 15px; }
+            .nav-cta { padding: 8px 16px !important; font-size: 12px !important; }
 
             .hero {
-                padding: 0 16px 36px;
-                min-height: 480px;
+                padding: 100px 16px 40px;
             }
             .hero-h1 {
-                font-size: clamp(28px, 6vw, 48px);
-                margin-bottom: 18px;
-                line-height: 1.1;
+                font-size: clamp(34px, 10vw, 48px);
+                margin-bottom: 20px;
+                line-height: 1.15;
             }
             .hero-badge {
-                left: 16px;
-                top: 64px;
-                font-size: 8px;
-                padding: 3px 8px;
+                font-size: 9.5px;
+                padding: 6px 14px;
+                margin-bottom: 24px;
             }
-            .hero-floating-num {
-                right: 16px;
-                top: 64px;
+            .hero-desc { font-size: 14px; margin-bottom: 24px; line-height: 1.7; }
+            .btn-primary { padding: 14px; font-size: 14px; }
+
+            .stat-block { padding: 24px 16px; }
+            .stat-n { font-size: clamp(32px, 9vw, 40px); }
+            .stat-l { font-size: 10px; }
+
+            #fitur, #testimonial, #pricing, #faq { padding: 64px 16px; }
+            #cta-finale { padding: 64px 16px; }
+
+            .section-tag { font-size: 10px; margin-bottom: 16px; }
+            .section-h2 { font-size: clamp(28px, 8.5vw, 40px); }
+
+            .feat, .testi, .price-card {
+                padding: 24px 20px;
             }
-            .hero-floating-n { font-size: 36px; }
-            .hero-floating-l { font-size: 7px; }
-            .hero-desc { font-size: 13px; margin-bottom: 14px; }
-            .hero-bottom { gap: 12px; }
-            .hero-actions { gap: 8px; }
-            .btn-primary { padding: 10px 16px; font-size: 12px; gap: 4px; }
-            .btn-ghost-hero { font-size: 12px; }
+            .feat-icon-wrap { width: 44px; height: 44px; margin-bottom: 8px; }
+            .feat-title { font-size: 18px; }
+            .feat-desc { font-size: 13.5px; }
 
-            .stats-bar { padding: 0; }
-            .stat-block { padding: 16px 12px; }
-            .stat-n { font-size: clamp(20px, 5vw, 32px); }
-            .stat-l { font-size: 8px; }
+            .testi { background: #0f1c34; border-color: rgba(255,255,255,.06); }
+            .testi-mark { font-size: 36px; margin-bottom: -10px; }
+            .testi-text { font-size: 14px; }
 
-            #fitur, #testimonial, #pricing, #faq { padding: 48px 16px; }
-            #cta-finale { padding: 40px 16px; }
+            .price-amount { font-size: clamp(32px, 9vw, 36px); }
+            .price-features li { font-size: 13.5px; }
+            .btn-price { padding: 14px; font-size: 14px; }
 
-            .section-tag { font-size: 8px; margin-bottom: 12px; }
-            .section-h2 { font-size: clamp(24px, 5vw, 40px); }
+            .faq-layout { gap: 28px; }
+            .faq-q-text { font-size: 16px; }
+            .faq-a { font-size: 13.5px; }
 
-            .features-grid, .testi-grid, .pricing-grid { gap: 0; border-radius: 8px; }
-            .feat {
-                padding: 18px 14px;
-                border-radius: 0;
-            }
-            .feat:first-child { border-top-left-radius: 8px; border-top-right-radius: 8px; }
-            .feat:last-child { border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; }
-            .feat-icon-wrap { width: 32px; height: 32px; }
-            .feat-title { font-size: 14px; }
-            .feat-desc { font-size: 12px; }
-
-            .testi { padding: 20px 14px; }
-            .testi-mark { font-size: 28px; }
-            .testi-text { font-size: 12px; }
-            .testi-avatar { width: 32px; height: 32px; font-size: 12px; }
-            .testi-name { font-size: 11px; }
-
-            .price-card {
-                padding: 18px 14px;
-                border-radius: 0;
-            }
-            .price-card:first-child { border-top-left-radius: 8px; border-top-right-radius: 8px; }
-            .price-card:last-child { border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; }
-            .price-amount { font-size: clamp(20px, 4vw, 32px); }
-            .price-features li { font-size: 12px; }
-            .btn-price { padding: 9px; font-size: 12px; }
-
-            .faq-layout { gap: 24px; }
-            .faq-q-text { font-size: 13px; }
-            .faq-a { font-size: 12px; }
-
-            .cta-h2 { font-size: clamp(24px, 5vw, 44px); margin-bottom: 20px; }
-            .cta-actions { gap: 8px; }
-            .btn-white { padding: 10px 16px; font-size: 12px; }
+            .cta-h2 { font-size: clamp(32px, 8.5vw, 44px); margin-bottom: 24px; }
+            .cta-actions { gap: 12px; flex-direction: column; width: 100%; }
+            .btn-white, .btn-ghost-cta { width: 100%; text-align: center; justify-content: center; }
 
             .schools-header { padding: 0 16px; }
-            .school-card { width: 130px; }
-            .school-name { font-size: 11px; }
+            .school-card { width: 160px; }
+            .school-name { font-size: 12px; }
 
-            footer { padding: 32px 16px 16px; }
-            .footer-logo { font-size: 16px; }
-            .footer-tagline { font-size: 11px; }
-            .footer-links { gap: 16px; }
-            .footer-col a { font-size: 11px; }
+            footer { padding: 40px 16px 20px; }
+            .footer-links { gap: 32px; flex-direction: row; }
 
-            .trust-strip { padding: 16px; gap: 12px; }
-            .trust-item { font-size: 11px; }
+            .trust-strip { padding: 20px 16px; gap: 12px; }
 
             .wa-float { bottom: 16px; right: 16px; }
-            .wa-float-btn { width: 44px; height: 44px; }
-            .wa-float-label { font-size: 10px; }
+            .wa-float-btn { width: 48px; height: 48px; }
+            .wa-float-label { font-size: 11px; }
 
-            .marquee-item { font-size: 9px; }
-            .pricing-warning { margin-bottom: 20px; padding: 12px 14px; }
-            .pricing-warning-title { font-size: 11px; }
-            .pricing-warning-text { font-size: 11px; }
+            .marquee-item { font-size: 10.5px; }
+            .pricing-warning { margin-bottom: 24px; padding: 16px; }
         }
 
-        /* Very small phones */
         @media (max-width: 360px) {
-            .hero-h1 { font-size: clamp(24px, 5.5vw, 40px); }
-            .section-h2 { font-size: clamp(20px, 5vw, 36px); }
-            .hero { padding: 0 12px 28px; }
-            #fitur, #testimonial, #pricing, #faq { padding: 40px 12px; }
-            .feat { padding: 14px 10px; }
-            .feat-title { font-size: 13px; }
+            .hero-h1 { font-size: clamp(28px, 10vw, 40px); }
+            .section-h2 { font-size: clamp(24px, 9vw, 36px); }
+            .hero { padding: 80px 12px 32px; }
+            #fitur, #testimonial, #pricing, #faq { padding: 48px 12px; }
+            .feat, .testi, .price-card { padding: 20px 16px; }
+            .feat-title { font-size: 17px; }
+            .nav-logo-text { display: none; } 
+            .nav-cta { font-size: 11px !important; padding: 8px 12px !important; }
         }
     </style>
 </head>
