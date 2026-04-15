@@ -6,11 +6,11 @@
 <div class="nxl-content">
     <!-- page header -->
     <div class="page-header">
-        <div class="page-header-left d-flex align-items-center">
+        <div class="page-header-left d-flex align-items-center flex-wrap">
             <div class="page-header-title">
-                <h5 class="m-b-10">Mutasi Kas</h5>
+                <h5 class="m-b-10 mb-0">Mutasi Kas</h5>
             </div>
-            <ul class="breadcrumb">
+            <ul class="breadcrumb mb-0">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
                 <li class="breadcrumb-item active">Mutasi Kas</li>
             </ul>
@@ -27,9 +27,9 @@
                     <a href="javascript:void(0);" class="btn btn-icon btn-light-brand" onclick="refreshPage()" data-bs-toggle="tooltip" title="Refresh Halaman">
                         <i class="feather-refresh-cw"></i>
                     </a>
-                    <a href="{{ route('mutasi-kas.create') }}" class="btn btn-primary">
-                        <i class="feather-plus me-2"></i>
-                        <span>Tambah Transaksi</span>
+                    <a href="{{ route('mutasi-kas.create') }}" class="btn btn-primary d-flex align-items-center">
+                        <i class="feather-plus ms-0 ms-sm-1"></i>
+                        <span class="d-none d-sm-inline ms-2">Tambah Transaksi</span>
                     </a>
                 </div>
             </div>
@@ -1025,8 +1025,8 @@
     }
 
     .stat-value {
-        font-size: 1rem;
-        line-height: 1.2;
+        font-size: 1.1rem;
+        line-height: 1.4;
     }
 
     .stat-icon {
@@ -1056,25 +1056,54 @@
     .table > tbody > tr > td {
         padding: 0.75rem;
         font-size: 0.8125rem;
+        white-space: nowrap;
     }
 
     .pagination-info {
         width: 100%;
         text-align: center;
+        margin-bottom: 0.5rem;
     }
 
     .pagination {
         justify-content: center;
+        flex-wrap: wrap;
     }
 
     .custom-date-picker {
-        width: 280px;
+        width: 260px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .date-picker-days button {
+        font-size: 0.7rem;
     }
 }
 
 @media (max-width: 576px) {
     .stat-value {
-        font-size: 0.875rem;
+        font-size: 0.95rem;
+    }
+
+    .page-header-title {
+        border-right: none !important;
+        margin-right: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    .page-header-title h5 {
+        margin-bottom: 5px !important;
+    }
+    
+    .card-header .badge {
+        font-size: 0.65rem;
+    }
+
+    .table-responsive {
+        border-radius: 0;
+        margin: 0 -1rem;
+        width: calc(100% + 2rem);
     }
 }
 </style>

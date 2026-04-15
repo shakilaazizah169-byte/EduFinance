@@ -96,18 +96,23 @@ Route::middleware(['auth', 'check.license'])->group(function () {
     // READ-ONLY: Laporan & export (bisa lihat meskipun expired)
     Route::get('/kategori', [KategoriController::class, 'index'])->name('kategori.index');
     Route::get('/kode-transaksi', [KodeTransaksiController::class, 'index'])->name('kode-transaksi.index');
-    Route::get('/kode-transaksi/{id}', [KodeTransaksiController::class, 'show'])->name('kode-transaksi.show');
+    Route::get('/kode-transaksi/{id}', [KodeTransaksiController::class, 'show'])->name('kode-transaksi.show')->where('id', '[0-9]+');
     Route::get('/perencanaan', [PerencanaanController::class, 'index'])->name('perencanaan.index');
-    Route::get('/perencanaan/{perencanaan}', [PerencanaanController::class, 'show'])->name('perencanaan.show');
+    Route::get('/perencanaan/{perencanaan}', [PerencanaanController::class, 'show'])->name('perencanaan.show')->where('perencanaan', '[0-9]+');
     Route::get('/realisasi', [RealisasiController::class, 'index'])->name('realisasi.index');
-    Route::get('/realisasi/{realisasi}', [RealisasiController::class, 'show'])->name('realisasi.show');
+    Route::get('/realisasi/{realisasi}', [RealisasiController::class, 'show'])->name('realisasi.show')->where('realisasi', '[0-9]+');
     Route::get('/mutasi-kas', [MutasiKasController::class, 'index'])->name('mutasi-kas.index');
     Route::get('/invoice', [InvoiceController::class, 'index'])->name('invoice.index');
-    Route::get('/invoice/{id}', [InvoiceController::class, 'show'])->name('invoice.show');
-    Route::get('/invoice/{id}/print', [InvoiceController::class, 'print'])->name('invoice.print');
+    Route::get('/invoice/{id}', [InvoiceController::class, 'show'])->name('invoice.show')->where('id', '[0-9]+');
+    Route::get('/invoice/{id}/print', [InvoiceController::class, 'print'])->name('invoice.print')->where('id', '[0-9]+');
     Route::get('/laporan-mutasi', [LaporanKasController::class, 'index'])->name('laporan.mutasi');
     Route::get('/laporan-mutasi/export-excel', [LaporanKasController::class, 'exportExcel'])->name('laporan.export.excel');
     Route::get('/laporan-mutasi/export-pdf', [LaporanKasController::class, 'exportPdf'])->name('laporan.export.pdf');
+
+     // 🔥 ROUTE UNTUK STORED PROCEDURE
+    Route::get('/laporan/stored-procedure', [LaporanKasController::class, 'laporanWithStoredProcedure'])->name('laporan.stored-procedure');
+    Route::get('/laporan/ringkasan-sp', [LaporanKasController::class, 'ringkasanWithStoredProcedure'])->name('laporan.ringkasan-sp');
+    Route::get('/laporan/cek-lisensi-sp', [LaporanKasController::class, 'cekLisensiWithStoredProcedure'])->name('laporan.cek-lisensi-sp');
 });
 
 // ================================================================

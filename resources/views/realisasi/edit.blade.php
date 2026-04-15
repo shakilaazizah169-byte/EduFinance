@@ -4,16 +4,16 @@
 
 @section('content')
 <div class="nxl-content">
-    <!-- Page Header -->
+    <!-- page header -->
     <div class="page-header">
-        <div class="page-header-left d-flex align-items-center">
+        <div class="page-header-left d-flex align-items-center flex-wrap">
             <div class="page-header-title">
-                <h5 class="m-b-10">Edit Realisasi</h5>
+                <h5 class="m-b-10 mb-0">Edit Realisasi</h5>
             </div>
-            <ul class="breadcrumb">
+            <ul class="breadcrumb mb-0">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('realisasi.index') }}">Realisasi</a></li>
-                <li class="breadcrumb-item">Edit</li>
+                <li class="breadcrumb-item active">Edit</li>
             </ul>
         </div>
         <div class="page-header-right ms-auto">
@@ -25,11 +25,12 @@
                     </a>
                 </div>
                 <div class="d-flex align-items-center gap-2 page-header-right-items-wrapper">
-                    <a href="{{ route('realisasi.show', $realisasi) }}" class="btn btn-icon btn-light-brand">
-                        <i class="feather-eye"></i>
+                    <a href="javascript:void(0);" class="btn btn-icon btn-light-brand" onclick="refreshPage()" data-bs-toggle="tooltip" title="Refresh Halaman">
+                        <i class="feather-refresh-cw"></i>
                     </a>
-                    <a href="{{ route('realisasi.index') }}" class="btn btn-icon btn-light-brand">
-                        <i class="feather-list"></i>
+                    <a href="{{ route('realisasi.index') }}" class="btn btn-outline-secondary">
+                        <i class="feather-arrow-left me-2"></i>
+                        <span>Kembali</span>
                     </a>
                 </div>
             </div>
@@ -40,507 +41,717 @@
             </div>
         </div>
     </div>
-    <!-- End Page Header -->
 
-    <!-- Main Content -->
+    <!-- main content -->
     <div class="main-content">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card stretch stretch-full">
+        <div class="row g-4">
+            <!-- kolom kiri - form utama (8 col) -->
+            <div class="col-lg-8">
+                <div class="card table-card">
                     <div class="card-header">
-                        <h5 class="card-title">Form Edit Realisasi</h5>
+                        <h5 class="mb-0">
+                            <i class="feather-edit-2 me-2 text-primary"></i>Form Edit Realisasi
+                        </h5>
+                        <span class="badge badge-secondary-light">ID: {{ $realisasi->id }}</span>
                     </div>
-
                     <div class="card-body">
-                        <form action="{{ route('realisasi.update', $realisasi) }}" method="POST" enctype="multipart/form-data" id="formRealisasi">
+                        @if($errors->any())
+                            <div class="alert alert-danger-custom mb-4">
+                                <div class="d-flex align-items-start gap-3">
+                                    <i class="feather-alert-circle fs-4 text-danger"></i>
+                                    <div class="flex-grow-1">
+                                        <div class="fw-semibold mb-2">Terjadi Kesalahan:</div>
+                                        <ul class="mb-0 ps-3">
+                                            @foreach($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
+                        <form action="{{ route('realisasi.update', $realisasi->id) }}" method="POST" enctype="multipart/form-data" id="realisasiForm">
                             @csrf
                             @method('PUT')
                             
-                            <div class="row">
-                                <!-- Kolom Kiri (8 kolom) -->
-                                <div class="col-lg-8">
-                                    
-                                    <!-- Hubungkan ke Perencanaan -->
-                                    <div class="mb-4">
-                                        <h6 class="fw-semibold mb-3">
-                                            <i class="feather-link text-primary me-2"></i>Hubungkan ke Perencanaan
-                                        </h6>
-                                        
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label class="form-label fw-semibold">
-                                                    Perencanaan <span class="text-danger">*</span>
-                                                </label>
-                                                <select name="perencanaan_id" id="perencanaanSelect"
-                                                        class="form-control select2 @error('perencanaan_id') is-invalid @enderror"
-                                                        required>
-                                                    <option value="">-- Pilih Perencanaan --</option>
-                                                    @foreach($perencanaanList as $p)
-                                                        <option value="{{ $p->perencanaan_id }}"
-                                                                {{ old('perencanaan_id', $realisasi->perencanaan_id) == $p->perencanaan_id ? 'selected' : '' }}>
-                                                            {{ $p->judul }}
-                                                            ({{ \Carbon\Carbon::create()->month($p->bulan)->translatedFormat('F') }}
-                                                            {{ $p->tahun }})
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                                @error('perencanaan_id')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-
-                                            <div class="col-md-6 mb-3">
-                                                <label class="form-label fw-semibold">Detail Perencanaan</label>
-                                                <select name="detail_perencanaan_id" id="detailSelect"
-                                                        class="form-control select2-search @error('detail_perencanaan_id') is-invalid @enderror">
-                                                    <option value="">-- Pilih Detail (opsional) --</option>
-                                                </select>
-                                                @error('detail_perencanaan_id')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                @enderror
-                                                <small class="text-muted" id="detailHint">Memuat detail...</small>
-                                            </div>
-                                        </div>
-
-                                        <!-- Info Perencanaan Terpilih -->
-                                        <div id="perencanaanInfo" class="alert alert-info d-flex align-items-center p-3 mt-3">
-                                            <div class="avatar-text bg-info text-white me-3">
-                                                <i class="feather-calendar"></i>
-                                            </div>
-                                            <div id="perencanaanInfoContent" class="flex-grow-1"></div>
-                                        </div>
+                            <!-- Hubungkan ke Perencanaan -->
+                            <div class="mb-4">
+                                <h6 class="fw-semibold mb-3">
+                                    <i class="feather-link text-primary me-2"></i>Hubungkan ke Perencanaan
+                                </h6>
+                                
+                                <div class="row">
+                                    <div class="col-md-12 mb-3">
+                                        <label for="perencanaan_id" class="form-label">
+                                            Perencanaan <span class="text-danger">*</span>
+                                        </label>
+                                        <select name="perencanaan_id" id="perencanaanSelect"
+                                                class="form-select @error('perencanaan_id') is-invalid @enderror"
+                                                required>
+                                            <option value="">-- Pilih Perencanaan --</option>
+                                            @foreach($perencanaanList as $p)
+                                                <option value="{{ $p->perencanaan_id }}"
+                                                        {{ old('perencanaan_id', $realisasi->perencanaan_id) == $p->perencanaan_id ? 'selected' : '' }}>
+                                                    {{ $p->judul }} ({{ \Carbon\Carbon::create()->month($p->bulan)->translatedFormat('F') }} {{ $p->tahun }})
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('perencanaan_id')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
 
-                                    <!-- Detail Perencanaan yang Dipilih -->
-                                    <div id="detailPreviewWrap" class="mb-4">
-                                        <h6 class="fw-semibold mb-3">
-                                            <i class="feather-list text-primary me-2"></i>Detail Perencanaan yang Dipilih
-                                        </h6>
-                                        <div class="card bg-light border-0">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-md-6 mb-3">
-                                                        <div class="d-flex align-items-start gap-3">
-                                                            <div class="avatar-text bg-soft-primary text-primary">
-                                                                <i class="feather-target"></i>
-                                                            </div>
-                                                            <div class="flex-grow-1">
-                                                                <span class="text-muted d-block small">Kegiatan</span>
-                                                                <span class="fw-semibold" id="prev_perencanaan">
-                                                                    {{ $realisasi->detailPerencanaan->perencanaan ?? $realisasi->perencanaan->judul ?? '–' }}
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6 mb-3">
-                                                        <div class="d-flex align-items-start gap-3">
-                                                            <div class="avatar-text bg-soft-success text-success">
-                                                                <i class="feather-check-circle"></i>
-                                                            </div>
-                                                            <div class="flex-grow-1">
-                                                                <span class="text-muted d-block small">Target</span>
-                                                                <span class="fw-semibold" id="prev_target">
-                                                                    {{ $realisasi->detailPerencanaan->target ?? $realisasi->perencanaan->target ?? '–' }}
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6 mb-3">
-                                                        <div class="d-flex align-items-start gap-3">
-                                                            <div class="avatar-text bg-soft-info text-info">
-                                                                <i class="feather-file-text"></i>
-                                                            </div>
-                                                            <div class="flex-grow-1">
-                                                                <span class="text-muted d-block small">Deskripsi</span>
-                                                                <span class="fw-semibold" id="prev_deskripsi">
-                                                                    {{ $realisasi->detailPerencanaan->deskripsi ?? $realisasi->perencanaan->deskripsi ?? '–' }}
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6 mb-3">
-                                                        <div class="d-flex align-items-start gap-3">
-                                                            <div class="avatar-text bg-soft-warning text-warning">
-                                                                <i class="feather-calendar"></i>
-                                                            </div>
-                                                            <div class="flex-grow-1">
-                                                                <span class="text-muted d-block small">Pelaksanaan</span>
-                                                                <span class="fw-semibold" id="prev_pelaksanaan">
-                                                                    {{ $realisasi->detailPerencanaan->pelaksanaan ?? $realisasi->perencanaan->pelaksanaan ?? '–' }}
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Informasi Realisasi -->
-                                    <div class="mb-4">
-                                        <h6 class="fw-semibold mb-3">
-                                            <i class="feather-info text-primary me-2"></i>Informasi Realisasi
-                                        </h6>
-                                        
-                                        <div class="row">
-                                            <div class="col-md-8 mb-3">
-                                                <label class="form-label fw-semibold">
-                                                    Judul Realisasi <span class="text-danger">*</span>
-                                                </label>
-                                                <input type="text" name="judul"
-                                                       class="form-control @error('judul') is-invalid @enderror"
-                                                       value="{{ old('judul', $realisasi->judul) }}"
-                                                       placeholder="Contoh: Realisasi Pembelian ATK Bulan Januari"
-                                                       required>
-                                                @error('judul') 
-                                                    <div class="invalid-feedback">{{ $message }}</div> 
-                                                @enderror
-                                            </div>
-
-                                            <div class="col-md-4 mb-3">
-                                                <label class="form-label fw-semibold">
-                                                    Tanggal Realisasi <span class="text-danger">*</span>
-                                                </label>
-                                                <div class="custom-date-input">
-                                                    <input type="text" 
-                                                           id="tanggalRealisasiDisplay"
-                                                           class="form-control date-display" 
-                                                           placeholder="Pilih tanggal"
-                                                           value="{{ old('tanggal_realisasi', $realisasi->tanggal_realisasi->format('d/m/Y')) }}"
-                                                           readonly>
-                                                    <input type="hidden" name="tanggal_realisasi" id="tanggalRealisasi" 
-                                                           value="{{ old('tanggal_realisasi', $realisasi->tanggal_realisasi->format('Y-m-d')) }}">
-                                                    <i class="feather-calendar calendar-icon"></i>
-                                                    
-                                                    <!-- Custom Date Picker -->
-                                                    <div class="custom-date-picker" id="tanggalPicker">
-                                                        <div class="date-picker-header">
-                                                            <button type="button" class="month-nav" id="prevMonth">
-                                                                <i class="feather-chevron-left"></i>
-                                                            </button>
-                                                            <span class="month-year" id="monthYear">February 2026</span>
-                                                            <button type="button" class="month-nav" id="nextMonth">
-                                                                <i class="feather-chevron-right"></i>
-                                                            </button>
-                                                        </div>
-                                                        <div class="date-picker-weekdays">
-                                                            <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
-                                                        </div>
-                                                        <div class="date-picker-days" id="calendarDays"></div>
-                                                        <div class="date-picker-footer">
-                                                            <button type="button" class="btn-clear" id="clearDate">Clear</button>
-                                                            <button type="button" class="btn-today" id="todayDate">Today</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                @error('tanggal_realisasi')
-                                                    <div class="invalid-feedback d-block">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-
-                                            <div class="col-12 mb-3">
-                                                <label class="form-label fw-semibold">
-                                                    Deskripsi <span class="text-danger">*</span>
-                                                </label>
-                                                <textarea name="deskripsi"
-                                                          class="form-control @error('deskripsi') is-invalid @enderror"
-                                                          rows="4"
-                                                          placeholder="Jelaskan apa yang sudah direalisasikan..."
-                                                          required>{{ old('deskripsi', $realisasi->deskripsi) }}</textarea>
-                                                @error('deskripsi') 
-                                                    <div class="invalid-feedback">{{ $message }}</div> 
-                                                @enderror
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Pencapaian Target -->
-                                    <div class="mb-4">
-                                        <h6 class="fw-semibold mb-3">
-                                            <i class="feather-bullseye text-primary me-2"></i>Pencapaian Target
-                                        </h6>
-                                        
-                                        <div class="row">
-                                            <div class="col-md-4 mb-3">
-                                                <label class="form-label fw-semibold">
-                                                    Status Target <span class="text-danger">*</span>
-                                                </label>
-                                                <select name="status_target" id="statusTarget"
-                                                        class="form-control @error('status_target') is-invalid @enderror"
-                                                        required>
-                                                    <option value="">-- Pilih Status --</option>
-                                                    <option value="sesuai" {{ old('status_target', $realisasi->status_target) == 'sesuai' ? 'selected' : '' }}>✓ Sesuai Target</option>
-                                                    <option value="tidak" {{ old('status_target', $realisasi->status_target) == 'tidak' ? 'selected' : '' }}>✗ Tidak Sesuai</option>
-                                                    <option value="sebagian" {{ old('status_target', $realisasi->status_target) == 'sebagian' ? 'selected' : '' }}>◑ Tercapai Sebagian</option>
-                                                </select>
-                                                @error('status_target') 
-                                                    <div class="invalid-feedback">{{ $message }}</div> 
-                                                @enderror
-                                            </div>
-
-                                            <div class="col-md-8 mb-3">
-                                                <label class="form-label fw-semibold">
-                                                    Persentase
-                                                    <span class="badge bg-primary ms-2" id="persentaseLabel">
-                                                        {{ old('persentase', $realisasi->persentase) }}%
-                                                    </span>
-                                                </label>
-                                                <div class="d-flex align-items-center gap-3">
-                                                    <input type="range" id="persentaseRange"
-                                                           class="form-range flex-grow-1"
-                                                           min="0" max="100" step="1"
-                                                           value="{{ old('persentase', $realisasi->persentase) }}">
-                                                    <input type="number" id="persentaseInput"
-                                                           class="form-control" style="width:80px"
-                                                           min="0" max="100"
-                                                           value="{{ old('persentase', $realisasi->persentase) }}">
-                                                </div>
-                                                <input type="hidden" name="persentase" id="persentaseHidden"
-                                                       value="{{ old('persentase', $realisasi->persentase) }}">
-                                                <small class="text-muted">
-                                                    <i class="feather-info me-1"></i>Otomatis terisi saat pilih status, atau geser manual
-                                                </small>
-                                            </div>
-
-                                            <div class="col-md-6 mb-3">
-                                                <label class="form-label fw-semibold">Keterangan Target</label>
-                                                <textarea name="keterangan_target" class="form-control" rows="3"
-                                                          placeholder="Keterangan pencapaian target...">{{ old('keterangan_target', $realisasi->keterangan_target) }}</textarea>
-                                            </div>
-
-                                            <div class="col-md-6 mb-3">
-                                                <label class="form-label fw-semibold">Catatan Tambahan</label>
-                                                <textarea name="catatan_tambahan" class="form-control" rows="3"
-                                                          placeholder="Catatan lain yang perlu disampaikan...">{{ old('catatan_tambahan', $realisasi->catatan_tambahan) }}</textarea>
-                                            </div>
+                                    <div class="col-md-12 mb-3">
+                                        <label for="detail_perencanaan_id" class="form-label">
+                                            Detail Perencanaan <span class="text-muted">(opsional)</span>
+                                        </label>
+                                        <select name="detail_perencanaan_id" id="detailSelect"
+                                                class="form-select @error('detail_perencanaan_id') is-invalid @enderror">
+                                            <option value="">-- Pilih Detail (opsional) --</option>
+                                        </select>
+                                        @error('detail_perencanaan_id')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                        <div class="form-text" id="detailHint">
+                                            <i class="feather-info me-1"></i>Pilih perencanaan terlebih dahulu untuk melihat detail
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Kolom Kanan (4 kolom) - Lampiran -->
-                                <div class="col-lg-4">
-                                    <!-- Lampiran Existing -->
-                                    @if($realisasi->lampiran->count())
-                                    <div class="card stretch stretch-full mb-4">
-                                        <div class="card-header">
-                                            <h5 class="card-title mb-0">
-                                                <i class="feather-paperclip me-2"></i>Lampiran Saat Ini
-                                            </h5>
+                                <!-- Info Perencanaan Terpilih -->
+                                <div id="perencanaanInfo" class="alert alert-info-custom mt-3 @if(!$realisasi->perencanaan_id) d-none @endif">
+                                    <div class="d-flex align-items-start gap-3">
+                                        <i class="feather-calendar fs-5 text-primary mt-1"></i>
+                                        <div id="perencanaanInfoContent" class="flex-grow-1">
+                                            @if($realisasi->perencanaan)
+                                                <strong>{{ $realisasi->perencanaan->judul }}</strong> &mdash; 
+                                                {{ \Carbon\Carbon::create()->month($realisasi->perencanaan->bulan)->translatedFormat('F') }} {{ $realisasi->perencanaan->tahun }}
+                                            @endif
                                         </div>
-                                        <div class="card-body">
-                                            @foreach($realisasi->lampiran as $lmp)
-                                            <div class="file-preview d-flex align-items-center gap-3">
-                                                @if($lmp->isImage())
-                                                    <img src="{{ Storage::url($lmp->path_file) }}"
-                                                         class="file-thumb rounded">
-                                                @else
-                                                    <i class="feather-file-text fs-3 text-primary"></i>
-                                                @endif
-                                                <div class="flex-grow-1">
-                                                    <div class="fw-semibold">{{ $lmp->nama_file }}</div>
-                                                    <small class="text-muted">{{ $lmp->ukuran_format }}</small>
+                                    </div>
+                                </div>
+
+                                <!-- Detail Preview -->
+                                <div id="detailPreviewWrap" class="mt-3 @if(!$realisasi->detail_perencanaan_id) d-none @endif">
+                                    <div class="card bg-light border-0 rounded-3">
+                                        <div class="card-body p-3">
+                                            <h6 class="fw-semibold mb-3 small">
+                                                <i class="feather-list text-primary me-2"></i>Detail Perencanaan yang Dipilih
+                                            </h6>
+                                            <div class="row">
+                                                <div class="col-md-6 mb-2">
+                                                    <div class="d-flex align-items-start gap-2">
+                                                        <i class="feather-target text-primary mt-1" style="width: 18px;"></i>
+                                                        <div>
+                                                            <span class="text-muted d-block small">Kegiatan</span>
+                                                            <span class="fw-semibold small" id="prev_perencanaan">
+                                                                {{ $realisasi->detailPerencanaan->perencanaan ?? '-' }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input border-danger" type="checkbox"
-                                                           name="hapus_lampiran[]" value="{{ $lmp->id }}"
-                                                           id="hapus_{{ $lmp->id }}">
-                                                    <label class="form-check-label text-danger" for="hapus_{{ $lmp->id }}">
-                                                        <i class="feather-trash-2"></i>
-                                                    </label>
+                                                <div class="col-md-6 mb-2">
+                                                    <div class="d-flex align-items-start gap-2">
+                                                        <i class="feather-check-circle text-success mt-1" style="width: 18px;"></i>
+                                                        <div>
+                                                            <span class="text-muted d-block small">Target</span>
+                                                            <span class="fw-semibold small" id="prev_target">
+                                                                {{ $realisasi->detailPerencanaan->target ?? '-' }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 mb-2">
+                                                    <div class="d-flex align-items-start gap-2">
+                                                        <i class="feather-file-text text-info mt-1" style="width: 18px;"></i>
+                                                        <div>
+                                                            <span class="text-muted d-block small">Deskripsi</span>
+                                                            <span class="small" id="prev_deskripsi">
+                                                                {{ $realisasi->detailPerencanaan->deskripsi ?? '-' }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 mb-2">
+                                                    <div class="d-flex align-items-start gap-2">
+                                                        <i class="feather-calendar text-warning mt-1" style="width: 18px;"></i>
+                                                        <div>
+                                                            <span class="text-muted d-block small">Pelaksanaan</span>
+                                                            <span class="small" id="prev_pelaksanaan">
+                                                                {{ $realisasi->detailPerencanaan->pelaksanaan ?? '-' }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            @endforeach
-                                            <small class="text-muted d-block mt-2">
-                                                <i class="feather-info me-1"></i>Centang <i class="feather-trash-2 text-danger"></i> untuk menghapus file
-                                            </small>
-                                                                                    <div class="card-header">
-                                            <h5 class="card-title mb-0">
-                                                <i class="feather-upload-cloud me-2"></i>Tambah Lampiran Baru
-                                            </h5>
                                         </div>
-                                        <div class="card-body">
-                                            <div class="upload-area" id="dropZone">
-                                                <div class="text-center py-4">
-                                                    <i class="feather-upload-cloud display-4 text-muted mb-3"></i>
-                                                    <h6 class="fw-semibold mb-1">Klik atau drag file</h6>
-                                                    <p class="text-muted small mb-0">PDF, JPG, PNG, DOC, XLS</p>
-                                                    <p class="text-muted small mb-0">Maks 10MB per file</p>
-                                                </div>
-                                                <input type="file" name="lampiran[]" id="lampiranInput"
-                                                       accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx"
-                                                       multiple class="d-none">
-                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Informasi Realisasi -->
+                            <div class="mb-4">
+                                <h6 class="fw-semibold mb-3">
+                                    <i class="feather-info text-primary me-2"></i>Informasi Realisasi
+                                </h6>
+                                
+                                <div class="row">
+                                    <div class="col-md-8 mb-3">
+                                        <label for="judul" class="form-label">
+                                            Judul Realisasi <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" name="judul" id="judul"
+                                               class="form-control @error('judul') is-invalid @enderror"
+                                               value="{{ old('judul', $realisasi->judul) }}"
+                                               placeholder="Contoh: Realisasi Pembelian ATK Bulan Januari"
+                                               required>
+                                        @error('judul') 
+                                            <div class="invalid-feedback">{{ $message }}</div> 
+                                        @enderror
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <label for="tanggal_realisasi" class="form-label">
+                                            Tanggal Realisasi <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="custom-date-input" id="tanggalWrapper">
+                                            <input type="text" 
+                                                   id="tanggalDisplay"
+                                                   class="form-control date-display" 
+                                                   placeholder="Pilih tanggal"
+                                                   value="{{ old('tanggal_realisasi', $realisasi->tanggal_realisasi->format('d/m/Y')) }}"
+                                                   readonly>
+                                            <input type="hidden" name="tanggal_realisasi" id="tanggalHidden" 
+                                                   value="{{ old('tanggal_realisasi', $realisasi->tanggal_realisasi->format('Y-m-d')) }}">
+                                            <i class="feather-calendar calendar-icon"></i>
                                             
-                                            <div id="previewContainer" class="mt-3"></div>
-                                            @error('lampiran.*')
-                                                <div class="text-danger small mt-2">{{ $message }}</div>
-                                            @enderror
+                                            <!-- Custom Date Picker -->
+                                            <div class="custom-date-picker" id="tanggalPicker">
+                                                <div class="date-picker-header">
+                                                    <button type="button" class="month-nav" id="prevMonth">
+                                                        <i class="feather-chevron-left"></i>
+                                                    </button>
+                                                    <span class="month-year" id="monthYear">February 2026</span>
+                                                    <button type="button" class="month-nav" id="nextMonth">
+                                                        <i class="feather-chevron-right"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="date-picker-weekdays">
+                                                    <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+                                                </div>
+                                                <div class="date-picker-days" id="calendarDays"></div>
+                                                <div class="date-picker-footer">
+                                                    <button type="button" class="btn-clear" id="clearDate">Clear</button>
+                                                    <button type="button" class="btn-today" id="todayDate">Today</button>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="d-flex flex-column gap-2">
-                                        <button type="submit" class="btn btn-warning">
-                                            <i class="feather-save me-2"></i> Simpan Perubahan
-                                        </button>
-                                        <a href="{{ route('realisasi.show', $realisasi) }}" class="btn btn-outline-secondary">
-                                            <i class="feather-x-circle me-2"></i> Batal
-                                        </a>
+                                        @error('tanggal_realisasi')
+                                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                                        @enderror
                                     </div>
+
+                                    <div class="col-12 mb-3">
+                                        <label for="deskripsi" class="form-label">
+                                            Deskripsi <span class="text-danger">*</span>
+                                        </label>
+                                        <textarea name="deskripsi" id="deskripsi"
+                                                  class="form-control @error('deskripsi') is-invalid @enderror"
+                                                  rows="4"
+                                                  placeholder="Jelaskan apa yang sudah direalisasikan..."
+                                                  required>{{ old('deskripsi', $realisasi->deskripsi) }}</textarea>
+                                        @error('deskripsi') 
+                                            <div class="invalid-feedback">{{ $message }}</div> 
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Pencapaian Target -->
+                            <div class="mb-4">
+                                <h6 class="fw-semibold mb-3">
+                                    <i class="feather-bullseye text-primary me-2"></i>Pencapaian Target
+                                </h6>
+                                
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="status_target" class="form-label">
+                                            Status Target <span class="text-danger">*</span>
+                                        </label>
+                                        <select name="status_target" id="statusTarget"
+                                                class="form-select @error('status_target') is-invalid @enderror"
+                                                required>
+                                            <option value="">-- Pilih Status --</option>
+                                            <option value="sesuai" {{ old('status_target', $realisasi->status_target) == 'sesuai' ? 'selected' : '' }}>✓ Sesuai Target</option>
+                                            <option value="tidak" {{ old('status_target', $realisasi->status_target) == 'tidak' ? 'selected' : '' }}>✗ Tidak Sesuai</option>
+                                            <option value="sebagian" {{ old('status_target', $realisasi->status_target) == 'sebagian' ? 'selected' : '' }}>◑ Tercapai Sebagian</option>
+                                        </select>
+                                        @error('status_target') 
+                                            <div class="invalid-feedback">{{ $message }}</div> 
+                                        @enderror
+                                    </div>
+
+                                    <div class="col-md-8 mb-3">
+                                        <label class="form-label">
+                                            Persentase
+                                            <span class="badge badge-primary-light ms-2" id="persentaseLabel">
+                                                {{ old('persentase', $realisasi->persentase) }}%
+                                            </span>
+                                        </label>
+                                        <div class="d-flex align-items-center gap-3">
+                                            <input type="range" id="persentaseRange"
+                                                   class="form-range flex-grow-1"
+                                                   min="0" max="100" step="1"
+                                                   value="{{ old('persentase', $realisasi->persentase) }}">
+                                            <input type="number" id="persentaseInput"
+                                                   class="form-control" style="width:80px"
+                                                   min="0" max="100"
+                                                   value="{{ old('persentase', $realisasi->persentase) }}">
+                                        </div>
+                                        <input type="hidden" name="persentase" id="persentaseHidden"
+                                               value="{{ old('persentase', $realisasi->persentase) }}">
+                                        <div class="form-text">
+                                            <i class="feather-info me-1"></i>Otomatis terisi saat pilih status, atau geser manual
                                         </div>
                                     </div>
-                                    @endif
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="keterangan_target" class="form-label">Keterangan Target</label>
+                                        <textarea name="keterangan_target" id="keterangan_target" 
+                                                  class="form-control" rows="3"
+                                                  placeholder="Keterangan pencapaian target...">{{ old('keterangan_target', $realisasi->keterangan_target) }}</textarea>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="catatan_tambahan" class="form-label">Catatan Tambahan</label>
+                                        <textarea name="catatan_tambahan" id="catatan_tambahan" 
+                                                  class="form-control" rows="3"
+                                                  placeholder="Catatan lain yang perlu disampaikan...">{{ old('catatan_tambahan', $realisasi->catatan_tambahan) }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr class="my-4">
+
+                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                                <div class="pagination-info text-center text-md-start">
+                                    <i class="feather-info me-1"></i>
+                                    Pastikan data yang diisi sudah benar
+                                </div>
+                                <div class="d-flex flex-column flex-sm-row gap-2 w-100" style="max-width: 100%;">
+                                    <a href="{{ route('realisasi.create') }}" class="btn btn-outline-primary flex-grow-1">
+                                        <i class="feather-plus me-2"></i>Tambah Baru
+                                    </a>
+                                    <a href="{{ route('realisasi.index') }}" class="btn btn-outline-secondary flex-grow-1">
+                                        <i class="feather-x me-2"></i>Batal
+                                    </a>
+                                    <button type="submit" class="btn btn-primary flex-grow-1">
+                                        <i class="feather-save me-2"></i>Update Realisasi
+                                    </button>
                                 </div>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
+
+            <!-- kolom kanan - sidebar (4 col) -->
+            <div class="col-lg-4">
+                <!-- card detail ringkas -->
+                <div class="card table-card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="feather-info me-2 text-primary"></i>Detail Realisasi
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="info-item-detail mb-3">
+                            <div class="info-label-detail">ID Realisasi</div>
+                            <div class="info-value-detail">
+                                <span class="badge badge-primary-light">{{ $realisasi->id }}</span>
+                            </div>
+                        </div>
+                        <div class="info-item-detail mb-3">
+                            <div class="info-label-detail">Judul Realisasi</div>
+                            <div class="info-value-detail fw-semibold">{{ $realisasi->judul }}</div>
+                        </div>
+                        <div class="info-item-detail mb-3">
+                            <div class="info-label-detail">Tanggal Realisasi</div>
+                            <div class="info-value-detail">{{ $realisasi->tanggal_realisasi->format('d F Y') }}</div>
+                        </div>
+                        <div class="info-item-detail mb-3">
+                            <div class="info-label-detail">Status Target</div>
+                            <div class="info-value-detail">
+                                @php
+                                    $statusClass = '';
+                                    $statusIcon = '';
+                                    if($realisasi->status_target == 'sesuai') {
+                                        $statusClass = 'badge-success-light';
+                                        $statusIcon = 'feather-check-circle';
+                                    } elseif($realisasi->status_target == 'sebagian') {
+                                        $statusClass = 'badge-warning-light';
+                                        $statusIcon = 'feather-alert-circle';
+                                    } else {
+                                        $statusClass = 'badge-danger-light';
+                                        $statusIcon = 'feather-x-circle';
+                                    }
+                                @endphp
+                                <span class="badge {{ $statusClass }}">
+                                    <i class="{{ $statusIcon }} me-1"></i>
+                                    {{ ucfirst($realisasi->status_target) }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="info-item-detail mb-3">
+                            <div class="info-label-detail">Persentase</div>
+                            <div class="info-value-detail">
+                                <span class="badge badge-primary-light">{{ $realisasi->persentase }}%</span>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="info-item-detail mb-3">
+                            <div class="info-label-detail">Dibuat Pada</div>
+                            <div class="info-value-detail small">{{ $realisasi->created_at->format('d F Y, H:i') }}</div>
+                        </div>
+                        <div class="info-item-detail">
+                            <div class="info-label-detail">Terakhir Diubah</div>
+                            <div class="info-value-detail small">{{ $realisasi->updated_at->format('d F Y, H:i') }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- card lampiran existing -->
+                @if($realisasi->lampiran->count())
+                <div class="card table-card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="feather-paperclip me-2 text-primary"></i>Lampiran Saat Ini
+                        </h5>
+                        <span class="badge badge-info-light">{{ $realisasi->lampiran->count() }} file</span>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="list-group-custom">
+                            @foreach($realisasi->lampiran as $lmp)
+                            <div class="list-item">
+                                <div class="d-flex align-items-center gap-3">
+                                    @if($lmp->isImage())
+                                        <img src="{{ Storage::url($lmp->path_file) }}"
+                                             class="file-thumb rounded" style="width: 40px; height: 40px; object-fit: cover;">
+                                    @else
+                                        <div class="avatar-initial bg-primary-soft text-primary" style="width: 40px; height: 40px;">
+                                            <i class="feather-file-text"></i>
+                                        </div>
+                                    @endif
+                                    <div class="flex-grow-1">
+                                        <div class="fw-semibold small">{{ $lmp->nama_file }}</div>
+                                        <small class="text-muted">{{ $lmp->ukuran_format }}</small>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center justify-content-center m-0 p-0 gap-2">
+                                        <input class="form-check-input border-danger m-0 p-0" type="checkbox"
+                                               name="hapus_lampiran[]" value="{{ $lmp->id }}"
+                                               id="hapus_{{ $lmp->id }}" style="cursor: pointer;">
+                                        <label class="form-check-label text-danger m-0 p-0 d-flex align-items-center" for="hapus_{{ $lmp->id }}" style="cursor: pointer;">
+                                            <i class="feather-trash-2 fs-5"></i>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">
+                                <i class="feather-info me-1"></i>Centang <i class="feather-trash-2 text-danger"></i> untuk menghapus file
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                @endif
+
+                <!-- card upload lampiran baru -->
+                <div class="card table-card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="feather-upload-cloud me-2 text-primary"></i>Tambah Lampiran Baru
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="upload-area" id="dropZone">
+                            <div class="text-center py-4">
+                                <i class="feather-upload-cloud display-4 text-muted mb-3 d-block" style="font-size: 2.5rem;"></i>
+                                <h6 class="fw-semibold mb-1">Klik atau drag file</h6>
+                                <p class="text-muted small mb-0">PDF, JPG, PNG, DOC, XLS</p>
+                                <p class="text-muted small mb-0">Maks 10MB per file</p>
+                            </div>
+                            <input type="file" name="lampiran[]" id="lampiranInput"
+                                   accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx"
+                                   multiple class="d-none">
+                        </div>
+                        <div id="previewContainer" class="mt-3"></div>
+                        @error('lampiran.*')
+                            <div class="text-danger small mt-2">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
+                <!-- danger zone -->
+                <div class="card border-danger">
+                    <div class="card-header bg-danger-soft border-danger">
+                        <h5 class="mb-0 text-danger">
+                            <i class="feather-alert-triangle me-2"></i>Zona Berbahaya
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="small text-muted mb-3">
+                            Menghapus realisasi akan mempengaruhi semua data yang terkait.
+                        </p>
+                        @if($realisasi->lampiran->count() > 0)
+                            <div class="alert alert-warning-custom small mb-3">
+                                <i class="feather-alert-circle me-1"></i>
+                                Realisasi ini memiliki <strong>{{ $realisasi->lampiran->count() }} lampiran</strong> terkait
+                            </div>
+                        @endif
+                        <button type="button" 
+                                class="btn btn-outline-danger w-100" 
+                                onclick="deleteRealisasi({{ $realisasi->id }}, '{{ addslashes($realisasi->judul) }}')">
+                            <i class="feather-trash-2 me-2"></i>Hapus Realisasi
+                        </button>
+                        <form id="delete-form-{{ $realisasi->id }}" 
+                              action="{{ route('realisasi.destroy', $realisasi->id) }}" 
+                              method="POST" 
+                              style="display: none;">
+                            @csrf
+                            @method('DELETE')
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <!-- End Main Content -->
 </div>
 @endsection
 
 @push('styles')
-<!-- Select2 CSS -->
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
-
 <style>
-/* Card Styles */
+/* ============================================
+   VARIABLES
+   ============================================ */
+:root {
+    --primary-color: #3454D1;
+    --primary-dark: #1e3a8a;
+    --success-color: #25B003;
+    --info-color: #17a2b8;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --border-color: #e9ecef;
+    --bg-soft: #f8f9fa;
+}
+
+/* ============================================
+   CARD STYLES
+   ============================================ */
 .card {
     border: none;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    border-radius: 12px;
-    margin-bottom: 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.2s ease;
+}
+
+.card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .card-header {
-    background-color: transparent;
-    border-bottom: 1px solid #e9ecef;
-    padding: 1.25rem 1.5rem;
+    background: transparent;
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
 }
 
-.card-header .card-title {
-    margin-bottom: 0;
-    font-size: 1rem;
+.card-header h5 {
+    font-size: 0.95rem;
     font-weight: 600;
-    color: #334155;
+    color: #2c3e50;
+    margin-bottom: 0;
 }
 
 .card-body {
     padding: 1.5rem;
 }
 
-/* Form Elements */
-.form-label {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #334155;
-    margin-bottom: 0.4rem;
+.card-footer {
+    background: transparent;
+    border-top: 1px solid var(--border-color);
+    padding: 0.75rem 1.5rem;
 }
 
-.form-control {
-    border: 1.5px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 0.6rem 1rem;
-    font-size: 0.9rem;
+.border-danger {
+    border: 1px solid rgba(220, 53, 69, 0.2) !important;
+}
+
+/* ============================================
+   FORM STYLES
+   ============================================ */
+.form-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    color: #6c757d;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.form-control, .form-select {
+    border-radius: 0.625rem;
+    border: 1px solid #e2e8f0;
+    padding: 0.625rem 0.875rem;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    background-color: #ffffff;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(52, 84, 209, 0.1);
+    outline: none;
+}
+
+.form-control:hover, .form-select:hover {
+    border-color: #cbd5e0;
+}
+
+textarea.form-control {
+    resize: vertical;
+}
+
+/* Form Range */
+.form-range {
+    height: 1.5rem;
+    padding: 0;
+}
+
+.form-range::-webkit-slider-thumb {
+    background-color: var(--primary-color);
+}
+
+.form-range::-webkit-slider-thumb:active {
+    background-color: var(--primary-dark);
+}
+
+/* ============================================
+   BUTTON STYLES
+   ============================================ */
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    border: none;
+    border-radius: 0.625rem;
+    padding: 0.625rem 1.25rem;
+    font-weight: 500;
     transition: all 0.2s ease;
 }
 
-.form-control:focus {
-    border-color: #adb5bd;
-    box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.06);
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(52, 84, 209, 0.25);
 }
 
-.form-control.is-invalid {
-    border-color: #dc3545;
+.btn-outline-secondary {
+    border-radius: 0.625rem;
+    padding: 0.625rem 1rem;
+    border-color: #e2e8f0;
+    color: #6c757d;
+    transition: all 0.2s ease;
 }
 
-/* Select2 Customization */
-.select2-container--bootstrap-5 .select2-selection {
-    border: 1.5px solid #e2e8f0 !important;
-    border-radius: 8px !important;
-    min-height: 42px !important;
-    padding: 0.2rem 0.5rem !important;
+.btn-outline-secondary:hover {
+    background-color: var(--bg-soft);
+    border-color: #cbd5e0;
+    transform: translateY(-1px);
 }
 
-.select2-container--bootstrap-5 .select2-selection--single .select2-selection__rendered {
-    line-height: 28px !important;
-    font-size: 0.9rem !important;
-    color: #334155 !important;
+.btn-outline-primary {
+    border-radius: 0.625rem;
+    padding: 0.625rem 1rem;
+    border-color: #e2e8f0;
+    color: var(--primary-color);
+    transition: all 0.2s ease;
 }
 
-.select2-container--bootstrap-5 .select2-selection--single .select2-selection__arrow {
-    height: 40px !important;
+.btn-outline-primary:hover {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    border-color: transparent;
+    color: white;
+    transform: translateY(-1px);
 }
 
-.select2-container--bootstrap-5 .select2-dropdown {
-    border: 1.5px solid #e2e8f0 !important;
-    border-radius: 8px !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+.btn-outline-danger {
+    border-radius: 0.625rem;
+    padding: 0.625rem 1rem;
+    border-color: #e2e8f0;
+    color: var(--danger-color);
+    transition: all 0.2s ease;
 }
 
-.select2-container--bootstrap-5 .select2-results__option {
-    padding: 0.6rem 1rem !important;
-    font-size: 0.9rem !important;
+.btn-outline-danger:hover {
+    background-color: var(--danger-color);
+    border-color: transparent;
+    color: white;
+    transform: translateY(-1px);
 }
 
-.select2-container--bootstrap-5 .select2-results__option--highlighted {
-    background: #495057 !important;
-    color: white !important;
-}
-
-.select2-container--bootstrap-5 .select2-results__option[aria-selected=true] {
-    background-color: #f0f0f0 !important;
-    color: #333 !important;
-    font-weight: 600 !important;
-}
-
-.select2-search__field {
-    border: 1.5px solid #e2e8f0 !important;
-    border-radius: 6px !important;
-    padding: 0.4rem 0.8rem !important;
-    font-size: 0.9rem !important;
-}
-
-.select2-search__field:focus {
-    border-color: #adb5bd !important;
-    outline: none !important;
-    box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.06) !important;
-}
-
-/* Avatar Text */
-.avatar-text {
-    width: 42px;
-    height: 42px;
-    border-radius: 10px;
-    display: flex;
+.btn-icon {
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
-    font-weight: 600;
+    border-radius: 0.625rem;
 }
 
-.avatar-text.bg-soft-primary {
-    background-color: rgba(52, 84, 209, 0.1);
-    color: #3454D1;
+.btn-light-brand {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    color: #495057;
 }
 
-.avatar-text.bg-soft-success {
-    background-color: rgba(37, 176, 3, 0.1);
-    color: #25B003;
+.btn-light-brand:hover {
+    background-color: #e9ecef;
+    color: var(--primary-color);
 }
 
-.avatar-text.bg-soft-info {
-    background-color: rgba(23, 162, 184, 0.1);
-    color: #17a2b8;
+/* ============================================
+   ALERT STYLES
+   ============================================ */
+.alert-danger-custom {
+    background: linear-gradient(135deg, rgba(220, 53, 69, 0.08) 0%, rgba(220, 53, 69, 0.05) 100%);
+    border: 1px solid rgba(220, 53, 69, 0.15);
+    border-radius: 1rem;
+    padding: 1rem 1.25rem;
 }
 
-.avatar-text.bg-soft-warning {
-    background-color: rgba(255, 193, 7, 0.1);
-    color: #ffc107;
+.alert-info-custom {
+    background: linear-gradient(135deg, rgba(52, 84, 209, 0.08) 0%, rgba(52, 84, 209, 0.05) 100%);
+    border: 1px solid rgba(52, 84, 209, 0.15);
+    border-radius: 1rem;
+    padding: 1rem 1.25rem;
 }
 
-/* Custom Date Picker */
+.alert-warning-custom {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.08) 0%, rgba(255, 193, 7, 0.05) 100%);
+    border: 1px solid rgba(255, 193, 7, 0.15);
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+}
+
+/* ============================================
+   CUSTOM DATE PICKER
+   ============================================ */
 .custom-date-input {
     position: relative;
     width: 100%;
@@ -548,24 +759,17 @@
 
 .custom-date-input .date-display {
     background-color: white;
-    border: 1.5px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 0.6rem 1rem;
-    padding-right: 40px;
-    font-size: 0.9rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.625rem;
+    padding: 0.625rem 2.5rem 0.625rem 0.875rem;
+    font-size: 0.875rem;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
 .custom-date-input .date-display:hover {
-    border-color: #3454D1;
+    border-color: var(--primary-color);
     background-color: #f8fafc;
-}
-
-.custom-date-input .date-display:focus {
-    outline: none;
-    border-color: #3454D1;
-    box-shadow: 0 0 0 0.2rem rgba(52, 84, 209, 0.1);
 }
 
 .custom-date-input .calendar-icon {
@@ -573,23 +777,21 @@
     right: 12px;
     top: 50%;
     transform: translateY(-50%);
-    color: #6c757d;
+    color: #9ca3af;
     pointer-events: none;
-    transition: color 0.2s ease;
 }
 
 .custom-date-input:hover .calendar-icon {
-    color: #3454D1;
+    color: var(--primary-color);
 }
 
-/* Date Picker Dropdown */
 .custom-date-picker {
     position: absolute;
     top: calc(100% + 8px);
     left: 0;
     width: 320px;
     background: white;
-    border-radius: 16px;
+    border-radius: 1rem;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
     z-index: 1000;
     padding: 1rem;
@@ -617,7 +819,6 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
-    padding: 0 0.5rem;
 }
 
 .month-nav {
@@ -625,7 +826,7 @@
     height: 32px;
     border: none;
     background: #f8f9fa;
-    border-radius: 8px;
+    border-radius: 0.5rem;
     color: #495057;
     cursor: pointer;
     display: flex;
@@ -635,15 +836,14 @@
 }
 
 .month-nav:hover {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
     color: white;
-    transform: scale(0.95);
 }
 
 .month-year {
     font-weight: 600;
-    font-size: 1rem;
-    color: #2d3748;
+    font-size: 0.875rem;
+    color: #2c3e50;
 }
 
 .date-picker-weekdays {
@@ -654,18 +854,10 @@
 }
 
 .date-picker-weekdays span {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     font-weight: 600;
-    color: #718096;
+    color: #9ca3af;
     padding: 0.5rem 0;
-}
-
-.date-picker-weekdays span:first-child {
-    color: #e53e3e;
-}
-
-.date-picker-weekdays span:last-child {
-    color: #3182ce;
 }
 
 .date-picker-days {
@@ -678,10 +870,10 @@
     aspect-ratio: 1;
     border: none;
     background: transparent;
-    font-size: 0.9rem;
-    color: #2d3748;
+    font-size: 0.75rem;
+    color: #2c3e50;
     cursor: pointer;
-    border-radius: 8px;
+    border-radius: 0.5rem;
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
@@ -690,24 +882,20 @@
 }
 
 .date-picker-days button:hover:not(.empty) {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
     color: white;
-    transform: scale(0.95);
 }
 
 .date-picker-days button.today {
     background-color: #e9ecef;
     font-weight: 700;
-    color: #3454D1;
-    border: 2px solid #3454D1;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
 }
 
 .date-picker-days button.selected {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
     color: white;
-    font-weight: 600;
-    transform: scale(0.95);
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
 }
 
 .date-picker-days button.empty {
@@ -726,14 +914,14 @@
     gap: 0.5rem;
     margin-top: 1rem;
     padding-top: 1rem;
-    border-top: 1px solid #e9ecef;
+    border-top: 1px solid var(--border-color);
 }
 
 .btn-clear, .btn-today {
-    padding: 0.5rem 1rem;
+    padding: 0.375rem 0.875rem;
     border: none;
-    border-radius: 8px;
-    font-size: 0.85rem;
+    border-radius: 0.5rem;
+    font-size: 0.75rem;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -746,146 +934,373 @@
 
 .btn-clear:hover {
     background: #e9ecef;
-    color: #dc3545;
+    color: var(--danger-color);
 }
 
 .btn-today {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
     color: white;
 }
 
 .btn-today:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(52, 84, 209, 0.3);
 }
 
-/* Alert Styles */
-.alert-info {
-    background-color: rgba(23, 162, 184, 0.05);
-    border: 1px solid rgba(23, 162, 184, 0.1);
-    color: #055160;
-    border-radius: 12px;
+/* ============================================
+   INFO ITEM DETAIL
+   ============================================ */
+.info-item-detail {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
-/* File Preview */
-.file-preview {
-    border: 1px solid #e9ecef;
-    border-radius: 8px;
-    padding: 0.75rem;
-    margin-bottom: 0.5rem;
-    background-color: white;
-    transition: all 0.2s ease;
+.info-label-detail {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #6c757d;
 }
 
-.file-preview:hover {
-    border-color: #3454D1;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+.info-value-detail {
+    font-size: 0.875rem;
+    color: #2c3e50;
 }
 
-.file-preview .file-thumb {
-    width: 40px;
-    height: 40px;
-    border-radius: 6px;
-    object-fit: cover;
+/* ============================================
+   LIST GROUP CUSTOM
+   ============================================ */
+.list-group-custom {
+    padding: 0;
 }
 
-.file-preview .form-check {
-    padding-left: 0;
-    margin: 0;
+.list-item {
+    padding: 0.75rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
 }
 
-.file-preview .form-check-input {
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
+.list-item:last-child {
+    border-bottom: none;
 }
 
-.file-preview .form-check-input:checked {
-    background-color: #dc3545;
-    border-color: #dc3545;
-}
-
-/* Upload Area */
+/* ============================================
+   UPLOAD AREA
+   ============================================ */
 .upload-area {
     border: 2px dashed #e2e8f0;
-    border-radius: 12px;
+    border-radius: 0.75rem;
     background-color: #f8fafc;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 .upload-area:hover {
-    border-color: #3454D1;
+    border-color: var(--primary-color);
     background-color: rgba(52, 84, 209, 0.02);
 }
 
 .upload-area.dragover {
-    border-color: #3454D1;
+    border-color: var(--primary-color);
     background-color: rgba(52, 84, 209, 0.05);
 }
 
-/* Range Input */
-.form-range {
-    height: 1.5rem;
-    padding: 0;
+.file-thumb {
+    width: 40px;
+    height: 40px;
+    border-radius: 0.5rem;
+    object-fit: cover;
 }
 
-.form-range::-webkit-slider-thumb {
-    background-color: #3454D1;
-}
-
-.form-range::-webkit-slider-thumb:active {
-    background-color: #2a43b0;
-}
-
-/* Badge */
-.badge.bg-primary {
-    background-color: #3454D1 !important;
-    padding: 0.5rem 1rem;
+/* ============================================
+   BADGES
+   ============================================ */
+.badge {
     font-weight: 500;
+    font-size: 0.7rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: 2rem;
 }
 
-/* Buttons */
-.btn-warning {
-    background-color: #ffc107;
-    border-color: #ffc107;
-    color: #000;
+.badge-primary-light {
+    background-color: rgba(52, 84, 209, 0.08);
+    color: var(--primary-color);
 }
 
-.btn-warning:hover {
-    background-color: #ffca2c;
-    border-color: #ffca2c;
-    color: #000;
+.badge-success-light {
+    background-color: rgba(37, 176, 3, 0.08);
+    color: var(--success-color);
 }
 
-/* Responsive */
+.badge-danger-light {
+    background-color: rgba(220, 53, 69, 0.08);
+    color: var(--danger-color);
+}
+
+.badge-info-light {
+    background-color: rgba(23, 162, 184, 0.08);
+    color: var(--info-color);
+}
+
+.badge-warning-light {
+    background-color: rgba(255, 193, 7, 0.08);
+    color: #d39e00;
+}
+
+.badge-secondary-light {
+    background-color: rgba(108, 117, 125, 0.08);
+    color: #6c757d;
+}
+
+/* ============================================
+   SOFT BACKGROUNDS
+   ============================================ */
+.bg-primary-soft { background-color: rgba(52, 84, 209, 0.1); }
+.bg-success-soft { background-color: rgba(37, 176, 3, 0.1); }
+.bg-danger-soft { background-color: rgba(220, 53, 69, 0.08); }
+.bg-info-soft { background-color: rgba(23, 162, 184, 0.1); }
+
+/* Avatar Initial */
+.avatar-initial {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* ============================================
+   PAGINATION INFO
+   ============================================ */
+.pagination-info {
+    font-size: 0.75rem;
+    color: #6c757d;
+}
+
+/* ============================================
+   HR STYLES
+   ============================================ */
+hr {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: 1.5rem 0;
+}
+
+/* ============================================
+   CARD BG LIGHT
+   ============================================ */
+.card.bg-light {
+    background-color: #f8fafc !important;
+}
+
+.rounded-3 {
+    border-radius: 0.75rem !important;
+}
+
+/* ============================================
+   RESPONSIVE STYLES
+   ============================================ */
 @media (max-width: 768px) {
-    .card-header, .card-body {
+    .card-header {
+        padding: 0.875rem 1rem;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .card-body {
         padding: 1rem;
     }
-    
-    .avatar-text {
-        width: 36px;
-        height: 36px;
-        font-size: 14px;
+
+    .form-control, .form-select {
+        font-size: 0.8125rem;
     }
-    
+
+    .info-item-detail {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
     .custom-date-picker {
         width: 280px;
+        left: auto;
+        right: 0;
+    }
+}
+
+@media (max-width: 576px) {
+    .page-header-title {
+        border-right: none !important;
+        margin-right: 0 !important;
+        padding-right: 0 !important;
+    }
+    .page-header-title h5 {
+        margin-bottom: 5px !important;
     }
 }
 </style>
 @endpush
 
 @push('scripts')
-<!-- Select2 JS -->
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // ─── Elemen DOM ───────────────────────────────────────────────────────────
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.forEach(function(tooltipTriggerEl) {
+        new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+
+    // ========================================
+    // CUSTOM DATE PICKER
+    // ========================================
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                        'July', 'August', 'September', 'October', 'November', 'December'];
+    
+    const tanggalDisplay = document.getElementById('tanggalDisplay');
+    const tanggalHidden = document.getElementById('tanggalHidden');
+    const tanggalPicker = document.getElementById('tanggalPicker');
+    const monthYear = document.getElementById('monthYear');
+    const calendarDays = document.getElementById('calendarDays');
+    const prevMonthBtn = document.getElementById('prevMonth');
+    const nextMonthBtn = document.getElementById('nextMonth');
+    const clearDateBtn = document.getElementById('clearDate');
+    const todayBtn = document.getElementById('todayDate');
+
+    let currentDate = tanggalHidden.value ? new Date(tanggalHidden.value) : new Date();
+    let selectedDate = tanggalHidden.value ? new Date(tanggalHidden.value) : new Date();
+
+    function formatDate(date) {
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    }
+
+    function formatDateYMD(date) {
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${year}-${month}-${day}`;
+    }
+
+    function isSameDay(date1, date2) {
+        return date1.getDate() === date2.getDate() &&
+               date1.getMonth() === date2.getMonth() &&
+               date1.getFullYear() === date2.getFullYear();
+    }
+
+    function renderCalendar() {
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+        
+        monthYear.textContent = `${monthNames[month]} ${year}`;
+        
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const prevMonthDays = new Date(year, month, 0).getDate();
+        
+        let html = '';
+        
+        for (let i = firstDay; i > 0; i--) {
+            const day = prevMonthDays - i + 1;
+            html += `<button type="button" class="prev-month">${day}</button>`;
+        }
+        
+        for (let day = 1; day <= daysInMonth; day++) {
+            const date = new Date(year, month, day);
+            const isToday = isSameDay(date, new Date());
+            const isSelected = selectedDate && isSameDay(date, selectedDate);
+            
+            let classes = '';
+            if (isToday) classes += ' today';
+            if (isSelected) classes += ' selected';
+            
+            html += `<button type="button" class="${classes}" data-day="${day}">${day}</button>`;
+        }
+        
+        const totalDays = firstDay + daysInMonth;
+        const remainingCells = 42 - totalDays;
+        for (let day = 1; day <= remainingCells; day++) {
+            html += `<button type="button" class="next-month">${day}</button>`;
+        }
+        
+        calendarDays.innerHTML = html;
+        
+        calendarDays.querySelectorAll('button:not(.prev-month):not(.next-month)').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const day = parseInt(this.dataset.day);
+                const newDate = new Date(year, month, day);
+                selectedDate = newDate;
+                tanggalDisplay.value = formatDate(newDate);
+                tanggalHidden.value = formatDateYMD(newDate);
+                renderCalendar();
+                tanggalPicker.classList.remove('show');
+            });
+        });
+    }
+
+    if (tanggalDisplay) {
+        tanggalDisplay.addEventListener('click', function(e) {
+            e.stopPropagation();
+            tanggalPicker.classList.toggle('show');
+            renderCalendar();
+        });
+    }
+
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.custom-date-input')) {
+            if (tanggalPicker) tanggalPicker.classList.remove('show');
+        }
+    });
+
+    if (prevMonthBtn) {
+        prevMonthBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar();
+        });
+    }
+
+    if (nextMonthBtn) {
+        nextMonthBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
+        });
+    }
+
+    if (clearDateBtn) {
+        clearDateBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            selectedDate = null;
+            tanggalDisplay.value = '';
+            tanggalHidden.value = '';
+            renderCalendar();
+            tanggalPicker.classList.remove('show');
+        });
+    }
+
+    if (todayBtn) {
+        todayBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const today = new Date();
+            currentDate = new Date(today);
+            selectedDate = new Date(today);
+            tanggalDisplay.value = formatDate(today);
+            tanggalHidden.value = formatDateYMD(today);
+            renderCalendar();
+            tanggalPicker.classList.remove('show');
+        });
+    }
+
+    // ========================================
+    // PERENCANAAN & DETAIL
+    // ========================================
     const perencanaanSelect = document.getElementById('perencanaanSelect');
     const detailSelect = document.getElementById('detailSelect');
     const detailHint = document.getElementById('detailHint');
@@ -903,59 +1318,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const bulanNames = ['','Januari','Februari','Maret','April','Mei','Juni',
                         'Juli','Agustus','September','Oktober','November','Desember'];
 
-    // ─── Initialize Select2 ───────────────────────────────────────────────────
-    $('.select2').select2({
-        theme: 'bootstrap-5',
-        width: '100%',
-        placeholder: '-- Pilih Perencanaan --',
-        allowClear: true
-    });
-
-    $('#detailSelect').select2({
-        theme: 'bootstrap-5',
-        width: '100%',
-        placeholder: '-- Pilih Detail (opsional) --',
-        allowClear: true,
-        matcher: function(params, data) {
-            // Custom matcher for search
-            if ($.trim(params.term) === '') {
-                return data;
-            }
-
-            // Search in text and any other attributes
-            if (typeof data.text === 'undefined') {
-                return null;
-            }
-
-            var searchTerm = params.term.toLowerCase();
-            var text = data.text.toLowerCase();
-            
-            // Search in main text
-            if (text.indexOf(searchTerm) > -1) {
-                return data;
-            }
-
-            // Search in custom attributes if any
-            if (data.element && data.element.dataset) {
-                if (data.element.dataset.perencanaan && data.element.dataset.perencanaan.toLowerCase().indexOf(searchTerm) > -1) {
-                    return data;
-                }
-                if (data.element.dataset.target && data.element.dataset.target.toLowerCase().indexOf(searchTerm) > -1) {
-                    return data;
-                }
-            }
-
-            return null;
-        }
-    });
-
-    // ─── 1. Load detail on page init ────────────────────────────────────────
     function loadDetails(perencanaanId, selectedDetailId = null) {
         if (!perencanaanId) return;
 
-        // Disable and show loading
-        $('#detailSelect').prop('disabled', true).trigger('change');
-        detailHint.textContent = 'Memuat detail...';
+        detailSelect.disabled = true;
+        detailHint.innerHTML = '<i class="feather-loader me-1"></i>Memuat detail...';
 
         fetch(`{{ route('ajax.detail-perencanaan') }}?perencanaan_id=${perencanaanId}`, {
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
@@ -965,361 +1332,169 @@ document.addEventListener('DOMContentLoaded', function() {
             const details = data.details || [];
             const perencanaan = data.perencanaan;
 
-            // Update info header
-            if (perencanaan) {
+            if (perencanaan && infoContent) {
                 infoContent.innerHTML = `<strong>${perencanaan.judul}</strong> &mdash; ${bulanNames[perencanaan.bulan] || perencanaan.bulan} ${perencanaan.tahun}`;
                 perencanaanInfo.classList.remove('d-none');
             }
 
-            // Clear current options
-            $('#detailSelect').empty().append('<option value="">-- Pilih Detail (opsional) --</option>');
+            detailSelect.innerHTML = '<option value="">-- Pilih Detail (opsional) --</option>';
 
             if (details.length > 0) {
                 details.forEach(d => {
-                    const option = new Option(
-                        d.nomor + '. ' + d.perencanaan,
-                        d.id,
-                        false,
-                        selectedDetailId == d.id
-                    );
-                    
-                    // Add data attributes
-                    $(option).data('perencanaan', d.perencanaan || '');
-                    $(option).data('target', d.target || '');
-                    $(option).data('deskripsi', d.deskripsi || '');
-                    $(option).data('pelaksanaan', d.pelaksanaan || '');
-                    
-                    $('#detailSelect').append(option);
+                    const option = document.createElement('option');
+                    option.value = d.id;
+                    option.textContent = d.nomor + '. ' + d.perencanaan;
+                    option.dataset.perencanaan = d.perencanaan || '';
+                    option.dataset.target = d.target || '';
+                    option.dataset.deskripsi = d.deskripsi || '';
+                    option.dataset.pelaksanaan = d.pelaksanaan || '';
+                    if (selectedDetailId == d.id) option.selected = true;
+                    detailSelect.appendChild(option);
                 });
-                detailHint.textContent = details.length + ' detail tersedia';
+                detailHint.innerHTML = '<i class="feather-info me-1"></i>' + details.length + ' detail tersedia';
             } else {
-                $('#detailSelect').append('<option value="" disabled>Tidak ada detail</option>');
-                detailHint.textContent = 'Tidak ada detail untuk perencanaan ini';
+                detailSelect.innerHTML = '<option value="">Tidak ada detail</option>';
+                detailHint.innerHTML = '<i class="feather-info me-1"></i>Tidak ada detail untuk perencanaan ini';
             }
 
-            // Re-enable and refresh
-            $('#detailSelect').prop('disabled', false).trigger('change');
+            detailSelect.disabled = false;
 
-            // If there's a selected detail, make sure it's shown in preview
             if (selectedDetailId) {
-                const selectedOption = $('#detailSelect').find(`option[value="${selectedDetailId}"]`);
-                if (selectedOption.length) {
-                    updateDetailPreview(selectedOption[0]);
+                const selectedOption = detailSelect.querySelector(`option[value="${selectedDetailId}"]`);
+                if (selectedOption) {
+                    updateDetailPreview(selectedOption);
                 }
             }
         })
         .catch(err => {
             console.error('AJAX error:', err);
-            $('#detailSelect').empty().append('<option value="">Gagal memuat data</option>');
-            detailHint.textContent = 'Terjadi kesalahan, coba refresh halaman';
-            $('#detailSelect').prop('disabled', false).trigger('change');
+            detailSelect.innerHTML = '<option value="">Gagal memuat data</option>';
+            detailHint.innerHTML = '<i class="feather-alert-circle me-1"></i>Terjadi kesalahan, coba refresh halaman';
+            detailSelect.disabled = false;
         });
     }
 
-    // Load detail saat halaman pertama kali dibuka
-    if (currentPerencanaanId) {
-        loadDetails(currentPerencanaanId, currentDetailId);
-    }
-
-    // ─── 2. Pilih Perencanaan ──────────────────────────────────────────────
-    $('#perencanaanSelect').on('change', function() {
-        const id = $(this).val();
-
-        // Reset
-        $('#detailSelect').empty().append('<option value="">-- Pilih Detail (opsional) --</option>').prop('disabled', true).trigger('change');
-        detailHint.textContent = 'Pilih perencanaan terlebih dahulu';
-        perencanaanInfo.classList.add('d-none');
-        detailPreviewWrap.classList.add('d-none');
-
-        if (!id) {
-            detailHint.textContent = 'Pilih perencanaan terlebih dahulu';
-            return;
-        }
-
-        loadDetails(id);
-    });
-
-    // ─── 3. Pilih Detail → Tampilkan preview ────────────────────────────────
     function updateDetailPreview(selectedOption) {
-        const perencanaan = $(selectedOption).data('perencanaan') || selectedOption.dataset?.perencanaan;
-        const target = $(selectedOption).data('target') || selectedOption.dataset?.target;
-        const deskripsi = $(selectedOption).data('deskripsi') || selectedOption.dataset?.deskripsi;
-        const pelaksanaan = $(selectedOption).data('pelaksanaan') || selectedOption.dataset?.pelaksanaan;
+        if (!detailPreviewWrap) return;
+        
+        const perencanaan = selectedOption.dataset.perencanaan || '-';
+        const target = selectedOption.dataset.target || '-';
+        const deskripsi = selectedOption.dataset.deskripsi || '-';
+        const pelaksanaan = selectedOption.dataset.pelaksanaan || '-';
 
-        prevPerencanaan.textContent = perencanaan || '–';
-        prevTarget.textContent = target || '–';
-        prevDeskripsi.textContent = deskripsi || '–';
-        prevPelaksanaan.textContent = pelaksanaan || '–';
+        if (prevPerencanaan) prevPerencanaan.textContent = perencanaan;
+        if (prevTarget) prevTarget.textContent = target;
+        if (prevDeskripsi) prevDeskripsi.textContent = deskripsi;
+        if (prevPelaksanaan) prevPelaksanaan.textContent = pelaksanaan;
 
         detailPreviewWrap.classList.remove('d-none');
     }
 
-    $('#detailSelect').on('change', function() {
-        const selected = $(this).find(':selected')[0];
-
-        if (!$(this).val() || !selected) {
-            detailPreviewWrap.classList.add('d-none');
-            return;
-        }
-
-        updateDetailPreview(selected);
-    });
-
-    // ─── 4. Custom Date Picker ──────────────────────────────────────────────
-    const tanggalDisplay = document.getElementById('tanggalRealisasiDisplay');
-    const tanggalHidden = document.getElementById('tanggalRealisasi');
-    const tanggalPicker = document.getElementById('tanggalPicker');
-    const monthYear = document.getElementById('monthYear');
-    const calendarDays = document.getElementById('calendarDays');
-    const prevMonthBtn = document.getElementById('prevMonth');
-    const nextMonthBtn = document.getElementById('nextMonth');
-    const clearDateBtn = document.getElementById('clearDate');
-    const todayBtn = document.getElementById('todayDate');
-
-    let currentDate = tanggalHidden.value ? new Date(tanggalHidden.value) : new Date();
-    let selectedDate = tanggalHidden.value ? new Date(tanggalHidden.value) : new Date();
-
-    const monthNames = [
-        'January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December'
-    ];
-
-    function formatDate(date) {
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = date.getFullYear();
-        return `${day}/${month}/${year}`;
+    if (perencanaanSelect && currentPerencanaanId) {
+        loadDetails(currentPerencanaanId, currentDetailId);
     }
 
-    function formatDateYMD(date) {
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = date.getFullYear();
-        return `${year}-${month}-${day}`;
-    }
+    if (perencanaanSelect) {
+        perencanaanSelect.addEventListener('change', function() {
+            const id = this.value;
 
-    function renderCalendar() {
-        const year = currentDate.getFullYear();
-        const month = currentDate.getMonth();
-        
-        monthYear.textContent = `${monthNames[month]} ${year}`;
-        
-        const firstDay = new Date(year, month, 1).getDay();
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-        const prevMonthDays = new Date(year, month, 0).getDate();
-        
-        let html = '';
-        
-        // Previous month days
-        for (let i = firstDay; i > 0; i--) {
-            const day = prevMonthDays - i + 1;
-            html += `<button type="button" class="prev-month">${day}</button>`;
-        }
-        
-        // Current month days
-        for (let day = 1; day <= daysInMonth; day++) {
-            const date = new Date(year, month, day);
-            const isToday = isSameDay(date, new Date());
-            const isSelected = selectedDate && isSameDay(date, selectedDate);
-            
-            let classes = '';
-            if (isToday) classes += ' today';
-            if (isSelected) classes += ' selected';
-            
-            html += `<button type="button" class="${classes}" data-day="${day}">${day}</button>`;
-        }
-        
-        // Next month days
-        const totalDays = firstDay + daysInMonth;
-        const remainingCells = 42 - totalDays;
-        for (let day = 1; day <= remainingCells; day++) {
-            html += `<button type="button" class="next-month">${day}</button>`;
-        }
-        
-        calendarDays.innerHTML = html;
-        
-        // Add click handlers
-        calendarDays.querySelectorAll('button:not(.prev-month):not(.next-month)').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const day = parseInt(this.dataset.day);
-                const newDate = new Date(year, month, day);
-                
-                selectedDate = newDate;
-                tanggalDisplay.value = formatDate(newDate);
-                tanggalHidden.value = formatDateYMD(newDate);
-                
-                renderCalendar();
-                tanggalPicker.classList.remove('show');
-            });
+            if (detailSelect) {
+                detailSelect.innerHTML = '<option value="">-- Pilih Detail (opsional) --</option>';
+                detailSelect.disabled = true;
+            }
+            if (detailHint) detailHint.innerHTML = '<i class="feather-info me-1"></i>Pilih perencanaan terlebih dahulu';
+            if (perencanaanInfo) perencanaanInfo.classList.add('d-none');
+            if (detailPreviewWrap) detailPreviewWrap.classList.add('d-none');
+
+            if (!id) return;
+
+            loadDetails(id);
         });
     }
 
-    function isSameDay(date1, date2) {
-        return date1.getDate() === date2.getDate() &&
-               date1.getMonth() === date2.getMonth() &&
-               date1.getFullYear() === date2.getFullYear();
+    if (detailSelect) {
+        detailSelect.addEventListener('change', function() {
+            const selected = this.options[this.selectedIndex];
+            if (!this.value || !selected) {
+                if (detailPreviewWrap) detailPreviewWrap.classList.add('d-none');
+                return;
+            }
+            updateDetailPreview(selected);
+        });
     }
 
-    // Toggle date picker
-    tanggalDisplay.addEventListener('click', function(e) {
-        e.stopPropagation();
-        tanggalPicker.classList.toggle('show');
-        renderCalendar();
-    });
-
-    // Close when clicking outside
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('.custom-date-input')) {
-            tanggalPicker.classList.remove('show');
-        }
-    });
-
-    // Month navigation
-    prevMonthBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        currentDate.setMonth(currentDate.getMonth() - 1);
-        renderCalendar();
-    });
-
-    nextMonthBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        currentDate.setMonth(currentDate.getMonth() + 1);
-        renderCalendar();
-    });
-
-    // Clear date
-    clearDateBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        selectedDate = null;
-        tanggalDisplay.value = '';
-        tanggalHidden.value = '';
-        renderCalendar();
-        tanggalPicker.classList.remove('show');
-    });
-
-    // Today
-    todayBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        const today = new Date();
-        currentDate = new Date(today);
-        selectedDate = new Date(today);
-        
-        tanggalDisplay.value = formatDate(today);
-        tanggalHidden.value = formatDateYMD(today);
-        
-        renderCalendar();
-        tanggalPicker.classList.remove('show');
-    });
-
-    // ─── 5. Status Target & Persentase (Dua Arah) ──────────────────────────────
+    // ========================================
+    // STATUS & PERSENTASE
+    // ========================================
     const statusTarget = document.getElementById('statusTarget');
     const persentaseRange = document.getElementById('persentaseRange');
     const persentaseInput = document.getElementById('persentaseInput');
     const persentaseLabel = document.getElementById('persentaseLabel');
     const persentaseHidden = document.getElementById('persentaseHidden');
 
-    // Flag untuk mencegah infinite loop
     let isUpdatingFromStatus = false;
     let isUpdatingFromPersentase = false;
 
-    // Fungsi untuk update semua elemen persentase
     function updatePersentase(val, source = 'manual') {
         val = parseInt(val);
         if (isNaN(val)) val = 0;
         val = Math.min(100, Math.max(0, val));
         
-        // Update UI
-        persentaseRange.value = val;
-        persentaseInput.value = val;
-        persentaseHidden.value = val;
-        persentaseLabel.textContent = val + '%';
+        if (persentaseRange) persentaseRange.value = val;
+        if (persentaseInput) persentaseInput.value = val;
+        if (persentaseHidden) persentaseHidden.value = val;
+        if (persentaseLabel) persentaseLabel.textContent = val + '%';
         
-        // Update status berdasarkan persentase (jika bukan dari status)
-        if (source !== 'status') {
+        if (source !== 'status' && statusTarget) {
             updateStatusFromPersentase(val);
         }
     }
 
-    // Fungsi untuk update status berdasarkan persentase
     function updateStatusFromPersentase(val) {
         if (isUpdatingFromStatus) return;
-        
         isUpdatingFromPersentase = true;
         
         let newStatus = '';
-        if (val === 100) {
-            newStatus = 'sesuai';
-        } else if (val === 0) {
-            newStatus = 'tidak';
-        } else if (val > 0 && val < 100) {
-            newStatus = 'sebagian';
-        }
+        if (val === 100) newStatus = 'sesuai';
+        else if (val === 0) newStatus = 'tidak';
+        else if (val > 0 && val < 100) newStatus = 'sebagian';
         
         if (newStatus && statusTarget.value !== newStatus) {
             statusTarget.value = newStatus;
-            
-            // Trigger visual change untuk Select2 jika ada
-            if ($(statusTarget).hasClass('select2-hidden-accessible')) {
-                $(statusTarget).trigger('change');
-            }
         }
         
-        setTimeout(() => {
-            isUpdatingFromPersentase = false;
-        }, 50);
+        setTimeout(() => { isUpdatingFromPersentase = false; }, 50);
     }
 
-    // Fungsi untuk update persentase berdasarkan status
     function updatePersentaseFromStatus(status) {
         if (isUpdatingFromPersentase) return;
-        
         isUpdatingFromStatus = true;
         
-        const map = { 
-            sesuai: 100, 
-            tidak: 0, 
-            sebagian: 50 
-        };
+        const map = { sesuai: 100, tidak: 0, sebagian: 50 };
         
         if (status in map) {
             const val = map[status];
-            
-            // Update UI
-            persentaseRange.value = val;
-            persentaseInput.value = val;
-            persentaseHidden.value = val;
-            persentaseLabel.textContent = val + '%';
-            
-            // Trigger event untuk memberitahu perubahan
-            const event = new Event('input', { bubbles: true });
-            persentaseRange.dispatchEvent(event);
+            if (persentaseRange) persentaseRange.value = val;
+            if (persentaseInput) persentaseInput.value = val;
+            if (persentaseHidden) persentaseHidden.value = val;
+            if (persentaseLabel) persentaseLabel.textContent = val + '%';
         }
         
-        setTimeout(() => {
-            isUpdatingFromStatus = false;
-        }, 50);
+        setTimeout(() => { isUpdatingFromStatus = false; }, 50);
     }
 
-    // Event listener untuk perubahan status
     if (statusTarget) {
         statusTarget.addEventListener('change', function() {
             updatePersentaseFromStatus(this.value);
         });
-        
-        // Untuk Select2 jika digunakan
-        $(statusTarget).on('change', function() {
-            updatePersentaseFromStatus($(this).val());
-        });
     }
 
-    // Event listener untuk range slider
     if (persentaseRange) {
         persentaseRange.addEventListener('input', function() {
             updatePersentase(this.value, 'slider');
         });
     }
 
-    // Event listener untuk input number
     if (persentaseInput) {
         persentaseInput.addEventListener('input', function() {
             let val = parseInt(this.value) || 0;
@@ -1330,27 +1505,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Inisialisasi awal - pastikan status dan persentase sinkron
-    setTimeout(() => {
-        // Cek apakah persentase tidak sesuai dengan status
-        const currentStatus = statusTarget.value;
-        const currentPersentase = parseInt(persentaseHidden.value);
-        
-        if (currentStatus) {
-            const expectedPersentase = {
-                sesuai: 100,
-                tidak: 0,
-                sebagian: 50
-            }[currentStatus];
-            
-            // Jika tidak sesuai, update berdasarkan status (prioritas status)
-            if (expectedPersentase !== undefined && currentPersentase !== expectedPersentase) {
-                updatePersentaseFromStatus(currentStatus);
-            }
-        }
-    }, 100);
-
-    // ─── 6. Multiple File Upload + Preview ───────────────────────────────────
+    // ========================================
+    // FILE UPLOAD
+    // ========================================
     const lampiranInput = document.getElementById('lampiranInput');
     const previewContainer = document.getElementById('previewContainer');
     const dropZone = document.getElementById('dropZone');
@@ -1393,7 +1550,7 @@ document.addEventListener('DOMContentLoaded', function() {
             div.innerHTML = `
                 <img src="" class="file-thumb rounded">
                 <div class="flex-grow-1">
-                    <div class="fw-semibold">${file.name}</div>
+                    <div class="fw-semibold small">${file.name}</div>
                     <small class="text-muted">${size}</small>
                 </div>
                 <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeFile(${index})">
@@ -1407,7 +1564,7 @@ document.addEventListener('DOMContentLoaded', function() {
             div.innerHTML = `
                 <i class="${iconClass} fs-3"></i>
                 <div class="flex-grow-1">
-                    <div class="fw-semibold">${file.name}</div>
+                    <div class="fw-semibold small">${file.name}</div>
                     <small class="text-muted">${size}</small>
                 </div>
                 <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeFile(${index})">
@@ -1416,19 +1573,20 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
         }
         
-        previewContainer.appendChild(div);
+        if (previewContainer) previewContainer.appendChild(div);
     }
 
     window.removeFile = function(index) {
         selectedFiles[index] = null;
-        document.getElementById(`fp-${index}`)?.remove();
+        const element = document.getElementById(`fp-${index}`);
+        if (element) element.remove();
         syncFileInput();
     };
 
     function syncFileInput() {
         const dt = new DataTransfer();
         selectedFiles.filter(Boolean).forEach(f => dt.items.add(f));
-        lampiranInput.files = dt.files;
+        if (lampiranInput) lampiranInput.files = dt.files;
     }
 
     if (dropZone) {
@@ -1449,94 +1607,111 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         dropZone.addEventListener('click', () => {
-            lampiranInput.click();
+            if (lampiranInput) lampiranInput.click();
         });
     }
 
-    // ─── 7. Form Submit ─────────────────────────────────────────────────────
-    const form = document.getElementById('formRealisasi');
-    const submitBtn = document.querySelector('button[type="submit"]');
+    // ========================================
+    // FORM SUBMIT
+    // ========================================
+    const form = document.getElementById('realisasiForm');
+    const submitBtn = form ? form.querySelector('button[type="submit"]') : null;
 
     if (form) {
         form.addEventListener('submit', function(e) {
-            // Validasi perencanaan
             if (!perencanaanSelect.value) {
                 e.preventDefault();
-                showToast('Silakan pilih perencanaan', 'error');
+                Swal.fire({ icon: 'error', title: 'Peringatan', text: 'Silakan pilih perencanaan', confirmButtonColor: '#3454D1' });
                 perencanaanSelect.focus();
                 return;
             }
 
-            // Validasi judul
-            const judulInput = document.querySelector('input[name="judul"]');
+            const judulInput = document.getElementById('judul');
             if (!judulInput.value.trim()) {
                 e.preventDefault();
-                showToast('Judul realisasi harus diisi', 'error');
+                Swal.fire({ icon: 'error', title: 'Peringatan', text: 'Judul realisasi harus diisi', confirmButtonColor: '#3454D1' });
                 judulInput.focus();
                 return;
             }
 
-            // Validasi tanggal
             if (!tanggalHidden.value) {
                 e.preventDefault();
-                showToast('Tanggal realisasi harus diisi', 'error');
+                Swal.fire({ icon: 'error', title: 'Peringatan', text: 'Tanggal realisasi harus diisi', confirmButtonColor: '#3454D1' });
                 tanggalDisplay.focus();
                 return;
             }
 
-            // Validasi deskripsi
-            const deskripsiInput = document.querySelector('textarea[name="deskripsi"]');
+            const deskripsiInput = document.getElementById('deskripsi');
             if (!deskripsiInput.value.trim()) {
                 e.preventDefault();
-                showToast('Deskripsi harus diisi', 'error');
+                Swal.fire({ icon: 'error', title: 'Peringatan', text: 'Deskripsi harus diisi', confirmButtonColor: '#3454D1' });
                 deskripsiInput.focus();
                 return;
             }
 
-            // Validasi status target
             if (!statusTarget.value) {
                 e.preventDefault();
-                showToast('Status target harus dipilih', 'error');
+                Swal.fire({ icon: 'error', title: 'Peringatan', text: 'Status target harus dipilih', confirmButtonColor: '#3454D1' });
                 statusTarget.focus();
                 return;
             }
 
-            // Show loading
-            submitBtn.innerHTML = '<i class="feather-loader me-2"></i>Menyimpan...';
-            submitBtn.disabled = true;
+            if (submitBtn) {
+                submitBtn.innerHTML = '<i class="feather-loader me-2"></i>Menyimpan...';
+                submitBtn.disabled = true;
+            }
         });
     }
 
-    // ─── 8. Toast Helper ───────────────────────────────────────────────────
-    function showToast(message, type = 'info') {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true
-        });
-
-        Toast.fire({
-            icon: type,
-            title: message
-        });
-    }
-
-    // Initialize
     renderCalendar();
 });
 
-// SweetAlert Notifications
+function refreshPage() {
+    location.reload();
+}
+
+function deleteRealisasi(id, judul) {
+    Swal.fire({
+        title: 'Hapus Realisasi?',
+        html: `
+            <div class="text-start">
+                <p>Apakah Anda yakin ingin menghapus realisasi ini?</p>
+                <div class="alert alert-light border p-3 rounded-3">
+                    <div class="mb-0">
+                        <strong class="text-primary">Judul:</strong>
+                        <span>${judul}</span>
+                    </div>
+                </div>
+                <small class="text-muted">
+                    <i class="feather-alert-triangle me-1"></i>
+                    Data yang terhapus tidak dapat dikembalikan.
+                </small>
+            </div>
+        `,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: '<i class="feather-trash-2 me-2"></i>Ya, Hapus!',
+        cancelButtonText: '<i class="feather-x me-2"></i>Batal',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('delete-form-' + id).submit();
+        }
+    });
+}
+
 @if(session('success'))
     Swal.fire({
         icon: 'success',
         title: 'Berhasil!',
         text: '{{ session('success') }}',
-        timer: 2000,
-        showConfirmButton: false,
         toast: true,
-        position: 'top-end'
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true
     });
 @endif
 
@@ -1546,6 +1721,15 @@ document.addEventListener('DOMContentLoaded', function() {
         title: 'Oops...',
         text: '{{ session('error') }}',
         confirmButtonColor: '#3454D1'
+    });
+@endif
+
+@if($errors->any())
+    Swal.fire({
+        icon: 'error',
+        title: 'Terjadi Kesalahan',
+        html: '<ul class="text-start mb-0">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>',
+        confirmButtonText: 'OK'
     });
 @endif
 </script>

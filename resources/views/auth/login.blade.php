@@ -377,6 +377,23 @@
             .logo-float { top: 24px; left: 24px; }
             .form-header { margin-top: 40px; }
         }
+        
+        @media (max-width: 576px) {
+            main { padding: 75px 16px 24px; }
+            .form-panel { padding: 24px 16px; }
+            .logo-float { position: relative; top: 0; left: 0; margin-bottom: 24px; }
+            .form-header { margin-top: 0; }
+            .form-header h1 { font-size: 1.8rem; }
+            
+            .role-selector { flex-direction: column; border-radius: 16px; padding: 8px; gap: 4px; }
+            .role-btn { border-radius: 12px; padding: 10px; }
+            
+            .info-panel { padding: 32px 16px; }
+            .profile-card { padding: 24px 16px; }
+            .stats { padding: 12px; }
+            
+            .form-options { flex-direction: column; align-items: flex-start; gap: 12px; }
+        }
     </style>
 </head>
 <body>

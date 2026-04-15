@@ -27,9 +27,9 @@
                     <a href="javascript:void(0);" class="btn btn-icon btn-light-brand" onclick="refreshPage()" data-bs-toggle="tooltip" title="Refresh Halaman">
                         <i class="feather-refresh-cw"></i>
                     </a>
-                    <a href="{{ route('invoice.create') }}" class="btn btn-primary">
-                        <i class="feather-plus me-2"></i>
-                        <span>Buat Invoice</span>
+                    <a href="{{ route('invoice.create') }}" class="btn btn-primary d-flex align-items-center">
+                        <i class="feather-plus ms-0 ms-sm-1"></i>
+                        <span class="d-none d-sm-inline ms-2">Buat Invoice</span>
                     </a>
                 </div>
             </div>
@@ -1175,12 +1175,33 @@
     }
 
     .custom-date-picker {
-        width: 280px;
+        width: 260px;
+        left: 50%;
+        transform: translateX(-50%);
     }
     
     .quick-filter-btn {
         padding: 0.3rem 0.8rem;
         font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .page-header-title {
+        border-right: none !important;
+        margin-right: 0 !important;
+        padding-right: 0 !important;
+    }
+    .page-header-title h5 {
+        margin-bottom: 5px !important;
+    }
+    .table-responsive {
+        border-radius: 0;
+        margin: 0 -1rem;
+        width: calc(100% + 2rem);
+    }
+    .table td, .table th {
+        white-space: nowrap;
     }
 }
 </style>

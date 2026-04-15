@@ -38,6 +38,11 @@
         background: white;
         padding: 1.25rem 1.5rem;
         border-bottom: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.75rem;
     }
     
     .detail-card .card-body {
@@ -545,6 +550,17 @@
             max-width: 120px;
         }
     }
+
+    @media (max-width: 576px) {
+        .page-header-title {
+            border-right: none !important;
+            margin-right: 0 !important;
+            padding-right: 0 !important;
+        }
+        .page-header-title h5 {
+            margin-bottom: 5px !important;
+        }
+    }
 </style>
 @endpush
 
@@ -552,11 +568,11 @@
 <div class="nxl-content">
     <!-- Page Header -->
     <div class="page-header">
-        <div class="page-header-left d-flex align-items-center">
+        <div class="page-header-left d-flex align-items-center flex-wrap">
             <div class="page-header-title">
-                <h5 class="m-b-10">Detail Realisasi</h5>
+                <h5 class="m-b-10 mb-0">Detail Realisasi</h5>
             </div>
-            <ul class="breadcrumb">
+            <ul class="breadcrumb mb-0">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('realisasi.index') }}">Realisasi</a></li>
                 <li class="breadcrumb-item active">Detail</li>
@@ -597,7 +613,7 @@
 
                 <!-- Card Info Utama -->
                 <div class="detail-card mb-4">
-                    <div class="card-header d-flex justify-content-between align-items-center">
+                    <div class="card-header d-flex flex-wrap gap-3 justify-content-between align-items-center">
                         <div class="section-header">
                             <div class="sh-icon" style="background: rgba(52, 84, 209, 0.1);">
                                 <i class="feather-file-text" style="color: #3454D1;"></i>

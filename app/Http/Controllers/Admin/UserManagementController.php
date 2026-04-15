@@ -38,7 +38,7 @@ class UserManagementController extends Controller
             });
         }
 
-        $users = $query->paginate(1)->withQueryString();
+        $users = $query->paginate(10)->withQueryString();
 
         $stats = [
             'total'     => User::where('role', '!=', 'super_admin')->count(),

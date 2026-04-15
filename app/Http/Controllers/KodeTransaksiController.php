@@ -44,7 +44,7 @@ class KodeTransaksiController extends Controller
         // PENTING: Gunakan paginate() dan simpan hasilnya ke variabel
         $kodeTransaksi = $query->orderByRaw('user_id IS NULL DESC')
             ->orderBy('kode')
-            ->paginate(5)
+            ->paginate(10)
             ->withQueryString(); // Mempertahankan filter di pagination
         
         // =====================================================

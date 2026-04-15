@@ -35,7 +35,7 @@ class KategoriController extends Controller
         
         $kategori = $query->orderByRaw('user_id IS NULL DESC')
             ->orderBy('nama_kategori')
-            ->paginate(2)
+            ->paginate(10)
             ->withQueryString();
         
         // Hitung statistik

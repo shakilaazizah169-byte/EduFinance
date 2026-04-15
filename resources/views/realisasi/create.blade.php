@@ -6,11 +6,11 @@
 <div class="nxl-content">
     <!-- Page Header -->
     <div class="page-header">
-        <div class="page-header-left d-flex align-items-center">
+        <div class="page-header-left d-flex align-items-center flex-wrap">
             <div class="page-header-title">
-                <h5 class="m-b-10">Tambah Realisasi</h5>
+                <h5 class="m-b-10 mb-0">Tambah Realisasi</h5>
             </div>
-            <ul class="breadcrumb">
+            <ul class="breadcrumb mb-0">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('realisasi.index') }}">Realisasi</a></li>
                 <li class="breadcrumb-item">Tambah</li>
@@ -356,11 +356,15 @@
                             </div>
 
                             <!-- Form Actions -->
-                            <div class="d-flex justify-content-between border-top pt-4 mt-4">
-                                <a href="{{ route('realisasi.index') }}" class="btn btn-light">
-                                    <i class="feather-arrow-left me-2"></i>Kembali ke Daftar
-                                </a>
-                                <div class="d-flex gap-2">
+                            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 border-top pt-4 mt-4">
+                                <div class="pagination-info text-muted" style="font-size: 0.75rem;">
+                                    <i class="feather-info me-1"></i>
+                                    Pastikan data yang diisi sudah benar
+                                </div>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <a href="{{ route('realisasi.index') }}" class="btn btn-light">
+                                        <i class="feather-arrow-left me-2"></i>Batal
+                                    </a>
                                     <button type="reset" class="btn btn-outline-secondary" id="resetBtn">
                                         <i class="feather-refresh-ccw me-2"></i>Reset
                                     </button>
@@ -393,6 +397,11 @@
     background-color: transparent;
     border-bottom: 1px solid #e9ecef;
     padding: 1.25rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
 }
 
 .card-header .card-title {
@@ -777,7 +786,13 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-    .card-header, .card-body {
+    .card-header {
+        padding: 0.875rem 1rem;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .card-body {
         padding: 1rem;
     }
     
@@ -789,6 +804,17 @@
     
     .custom-date-picker {
         width: 280px;
+    }
+}
+
+@media (max-width: 576px) {
+    .page-header-title {
+        border-right: none !important;
+        margin-right: 0 !important;
+        padding-right: 0 !important;
+    }
+    .page-header-title h5 {
+        margin-bottom: 5px !important;
     }
 }
 </style>

@@ -55,7 +55,7 @@ class User extends Authenticatable
     /**
      * Ambil semua lisensi user (riwayat)
      */
-    public function allLicenses()
+    public function Licenses()
     {
         return $this->hasMany(License::class)->orderBy('created_at', 'desc');
     }

@@ -6,11 +6,11 @@
 <div class="nxl-content">
     <!-- page header -->
     <div class="page-header">
-        <div class="page-header-left d-flex align-items-center">
+        <div class="page-header-left d-flex align-items-center flex-wrap">
             <div class="page-header-title">
-                <h5 class="m-b-10">Tambah Mutasi Kas</h5>
+                <h5 class="m-b-10 mb-0">Tambah Mutasi Kas</h5>
             </div>
-            <ul class="breadcrumb">
+            <ul class="breadcrumb mb-0">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('mutasi-kas.index') }}">Mutasi Kas</a></li>
                 <li class="breadcrumb-item active">Tambah</li>
@@ -28,9 +28,9 @@
                     <a href="javascript:void(0);" class="btn btn-icon btn-light-brand" onclick="refreshPage()" data-bs-toggle="tooltip" title="Refresh Halaman">
                         <i class="feather-refresh-cw"></i>
                     </a>
-                    <a href="{{ route('mutasi-kas.index') }}" class="btn btn-outline-secondary">
-                        <i class="feather-list me-2"></i>
-                        <span>Daftar Transaksi</span>
+                    <a href="{{ route('mutasi-kas.index') }}" class="btn btn-outline-secondary d-flex align-items-center">
+                        <i class="feather-list ms-0 ms-sm-1"></i>
+                        <span class="d-none d-sm-inline ms-2">Daftar Transaksi</span>
                     </a>
                 </div>
             </div>
@@ -276,16 +276,16 @@
                             <hr class="my-4">
 
                             <!-- form actions -->
-                            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
-                                <div class="pagination-info">
+                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                                <div class="pagination-info text-center text-md-start">
                                     <i class="feather-info me-1"></i>
                                     Pastikan data yang diisi sudah benar
                                 </div>
-                                <div class="d-flex gap-2">
-                                    <button type="reset" class="btn btn-outline-secondary" id="resetBtn">
+                                <div class="d-flex flex-column flex-sm-row gap-2 w-100 w-md-auto" style="max-width: 100%;">
+                                    <button type="reset" class="btn btn-outline-secondary flex-grow-1" id="resetBtn">
                                         <i class="feather-refresh-cw me-2"></i>Reset
                                     </button>
-                                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                                    <button type="submit" class="btn btn-primary flex-grow-1" id="submitBtn">
                                         <i class="feather-save me-2"></i>Simpan Transaksi
                                     </button>
                                 </div>
@@ -815,7 +815,13 @@ hr {
     }
 
     .custom-date-picker {
-        width: 280px;
+        width: 260px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .date-picker-days button {
+        font-size: 0.7rem;
     }
 
     .info-icon-custom {
@@ -825,6 +831,21 @@ hr {
 
     .info-icon-custom i {
         font-size: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .page-header-title {
+        border-right: none !important;
+        margin-right: 0 !important;
+        padding-right: 0 !important;
+    }
+    .page-header-title h5 {
+        margin-bottom: 5px !important;
+    }
+    
+    .pagination-info {
+        margin-bottom: 0.5rem;
     }
 }
 </style>

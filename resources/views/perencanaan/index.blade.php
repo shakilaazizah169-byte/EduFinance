@@ -6,11 +6,11 @@
 <div class="nxl-content">
     <!-- page header -->
     <div class="page-header">
-        <div class="page-header-left d-flex align-items-center">
+        <div class="page-header-left d-flex align-items-center flex-wrap">
             <div class="page-header-title">
-                <h5 class="m-b-10">Perencanaan</h5>
+                <h5 class="m-b-10 mb-0">Perencanaan</h5>
             </div>
-            <ul class="breadcrumb">
+            <ul class="breadcrumb mb-0">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
                 <li class="breadcrumb-item active">Perencanaan</li>
             </ul>
@@ -250,11 +250,11 @@
                                                 class="action-btn text-danger"
                                                 data-bs-toggle="tooltip"
                                                 title="Hapus Perencanaan"
-                                                onclick="deletePerencanaan({{ $item->id }}, '{{ addslashes($item->judul) }}')">
+                                                onclick="deletePerencanaan({{ $item->perencanaan_id }}, '{{ addslashes($item->judul) }}')">
                                             <i class="feather-trash-2"></i>
                                         </button>
                                     </div>
-                                    <form id="delete-form-{{ $item->id }}"
+                                    <form id="delete-form-{{ $item->perencanaan_id }}"
                                           action="{{ route('perencanaan.destroy', $item) }}"
                                           method="POST"
                                           style="display: none;">
@@ -787,6 +787,17 @@
 
     .plan-title {
         font-size: 0.8125rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .page-header-title {
+        border-right: none !important;
+        margin-right: 0 !important;
+        padding-right: 0 !important;
+    }
+    .page-header-title h5 {
+        margin-bottom: 5px !important;
     }
 }
 </style>

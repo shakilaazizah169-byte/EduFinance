@@ -6,11 +6,11 @@
 <div class="nxl-content">
     <!-- page header -->
     <div class="page-header">
-        <div class="page-header-left d-flex align-items-center">
+        <div class="page-header-left d-flex align-items-center flex-wrap">
             <div class="page-header-title">
-                <h5 class="m-b-10">Realisasi Kas</h5>
+                <h5 class="m-b-10 mb-0">Realisasi Kas</h5>
             </div>
-            <ul class="breadcrumb">
+            <ul class="breadcrumb mb-0">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
                 <li class="breadcrumb-item active">Realisasi Kas</li>
             </ul>
@@ -419,6 +419,11 @@
     background: transparent;
     border-bottom: 1px solid var(--border-color);
     padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
 }
 
 .card-header h5 {
@@ -856,6 +861,8 @@
 
     .card-header {
         padding: 0.875rem 1rem;
+        flex-direction: column;
+        align-items: flex-start;
     }
 
     .table > thead > tr > th,
@@ -893,6 +900,17 @@
 
     .progress {
         min-width: 80px;
+    }
+}
+
+@media (max-width: 576px) {
+    .page-header-title {
+        border-right: none !important;
+        margin-right: 0 !important;
+        padding-right: 0 !important;
+    }
+    .page-header-title h5 {
+        margin-bottom: 5px !important;
     }
 }
 </style>

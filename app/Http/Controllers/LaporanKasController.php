@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\LaporanMutasiKasMultiSheetExport;
+use Illuminate\Support\Facades\DB;
 
 class LaporanKasController extends Controller
 {
@@ -53,6 +54,107 @@ class LaporanKasController extends Controller
             'endDate',
             'filterInfo'
         ));
+    }
+
+    /**
+     * 🔥 LAPORAN MENGGUNAKAN STORED PROCEDURE
+     * Untuk memenuhi persyaratan uji kompetensi
+     */
+    public function laporanWithStoredProcedure(Request $request)
+    {
+        $user_id = auth()->id();
+        $tahun = $request->get('tahun', date('Y'));
+        $bulan = $request->get('bulan', 0);
+        
+        // Ambil nama bulan untuk ditampilkan
+        $namaBulan = $bulan > 0 ? Carbon::create()->month($bulan)->translatedFormat('F') : 'Semua Bulan';
+        
+        try {
+            // 🔥 PANGGIL STORED PROCEDURE
+            $results = DB::select('CALL GetLaporanMutasiKas(?, ?, ?)', [
+                $user_id, 
+                $tahun, 
+                $bulan
+            ]);
+            
+            // Hitung total dari hasil stored procedure
+            $totalDebit = collect($results)->sum('debit');
+            $totalKredit = collect($results)->sum('kredit');
+            $saldoAkhir = !empty($results) ? end($results)->saldo : 0;
+            
+            return view('laporan.mutasi_sp', compact(
+                'results',
+                'tahun',
+                'bulan',
+                'namaBulan',
+                'totalDebit',
+                'totalKredit',
+                'saldoAkhir'
+            ));
+            
+        } catch (\Exception $e) {
+            // Jika stored procedure belum dibuat, tampilkan error
+            return back()->with('error', 'Stored procedure belum tersedia. Jalankan migration terlebih dahulu. Error: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * 🔥 RINGKASAN KEUANGAN DENGAN STORED PROCEDURE
+     */
+    public function ringkasanWithStoredProcedure(Request $request)
+    {
+        $user_id = auth()->id();
+        $tahun = $request->get('tahun', date('Y'));
+        
+        try {
+            // 🔥 PANGGIL STORED PROCEDURE RINGKASAN
+            $ringkasan = DB::select('CALL GetRingkasanKeuangan(?, ?)', [
+                $user_id, 
+                $tahun
+            ]);
+            
+            // Format data untuk chart
+            $bulanLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+            $pemasukanData = array_fill(0, 12, 0);
+            $pengeluaranData = array_fill(0, 12, 0);
+            
+            foreach ($ringkasan as $item) {
+                $index = $item->bulan - 1;
+                $pemasukanData[$index] = (float) $item->total_pemasukan;
+                $pengeluaranData[$index] = (float) $item->total_pengeluaran;
+            }
+            
+            return view('laporan.ringkasan_sp', compact(
+                'ringkasan',
+                'tahun',
+                'bulanLabels',
+                'pemasukanData',
+                'pengeluaranData'
+            ));
+            
+        } catch (\Exception $e) {
+            return back()->with('error', 'Stored procedure belum tersedia. Error: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * 🔥 CEK STATUS LISENSI DENGAN STORED PROCEDURE
+     */
+    public function cekLisensiWithStoredProcedure()
+    {
+        $user_id = auth()->id();
+        
+        try {
+            // 🔥 PANGGIL STORED PROCEDURE CEK LISENSI
+            $result = DB::select('CALL GetStatusLisensi(?)', [$user_id]);
+            
+            $lisensi = !empty($result) ? $result[0] : null;
+            
+            return view('laporan.lisensi_sp', compact('lisensi'));
+            
+        } catch (\Exception $e) {
+            return back()->with('error', 'Stored procedure belum tersedia. Error: ' . $e->getMessage());
+        }
     }
 
     public function exportPdf(Request $request)

@@ -6,11 +6,11 @@
 <div class="nxl-content">
     <!-- page header -->
     <div class="page-header">
-        <div class="page-header-left d-flex align-items-center">
+        <div class="page-header-left d-flex align-items-center flex-wrap">
             <div class="page-header-title">
-                <h5 class="m-b-10">Edit Kode Mutasi</h5>
+                <h5 class="m-b-10 mb-0">Edit Kode Mutasi</h5>
             </div>
-            <ul class="breadcrumb">
+            <ul class="breadcrumb mb-0">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('kode-transaksi.index') }}">Kode Mutasi</a></li>
                 <li class="breadcrumb-item active">Edit</li>
@@ -660,6 +660,17 @@ hr {
     .info-item-detail {
         flex-direction: column;
         align-items: flex-start;
+    }
+}
+
+@media (max-width: 576px) {
+    .page-header-title {
+        border-right: none !important;
+        margin-right: 0 !important;
+        padding-right: 0 !important;
+    }
+    .page-header-title h5 {
+        margin-bottom: 5px !important;
     }
 }
 </style>

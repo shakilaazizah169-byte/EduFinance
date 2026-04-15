@@ -1,18 +1,18 @@
 @extends('layouts.app')
 
-@section('title', 'Data Kode Transaksi')
+@section('title', 'Data Kode Mutasi')
 
 @section('content')
 <div class="nxl-content">
     <!-- page header -->
     <div class="page-header">
-        <div class="page-header-left d-flex align-items-center">
+        <div class="page-header-left d-flex align-items-center flex-wrap">
             <div class="page-header-title">
-                <h5 class="m-b-10">Kode Transaksi</h5>
+                <h5 class="m-b-10 mb-0">Kode Mutasi</h5>
             </div>
-            <ul class="breadcrumb">
+            <ul class="breadcrumb mb-0">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item active">Kode Transaksi</li>
+                <li class="breadcrumb-item active">Kode Mutasi</li>
             </ul>
         </div>
         <div class="page-header-right ms-auto">
@@ -51,7 +51,7 @@
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="flex-grow-1">
                                 <h2 class="stat-value text-primary mb-1">{{ number_format($totalKode, 0, ',', '.') }}</h2>
-                                <p class="stat-label text-muted mb-0">Total Kode Transaksi</p>
+                                <p class="stat-label text-muted mb-0">Total Kode Mutasi</p>
                             </div>
                             <div class="stat-icon bg-primary-soft text-primary">
                                 <i class="feather-hash"></i>
@@ -187,7 +187,7 @@
         <div class="card table-card">
             <div class="card-header">
                 <h5 class="mb-0">
-                    <i class="feather-list me-2"></i>Daftar Kode Transaksi
+                    <i class="feather-list me-2"></i>Daftar Kode Mutasi
                 </h5>
             </div>
             <div class="card-body p-0">
@@ -324,10 +324,10 @@
                                             <i class="feather-inbox"></i>
                                         </div>
                                         <h6 class="empty-state-title">Belum Ada Data</h6>
-                                        <p class="empty-state-text">Belum ada data kode transaksi yang tersedia</p>
+                                        <p class="empty-state-text">Belum ada data Kode Mutasi yang tersedia</p>
                                         @if(!request()->hasAny(['kategori_id', 'search']))
                                         <a href="{{ route('kode-transaksi.create') }}" class="btn btn-primary mt-3">
-                                            <i class="feather-plus me-2"></i>Tambah Kode Transaksi
+                                            <i class="feather-plus me-2"></i>Tambah Kode Mutasi
                                         </a>
                                         @endif
                                     </div>
@@ -799,6 +799,80 @@
     color: #6c757d;
 }
 
+/* ============================================
+   RESPONSIVE STYLES
+   ============================================ */
+@media (max-width: 768px) {
+    .stat-card .card-body {
+        padding: 0.875rem 1rem;
+    }
+
+    .stat-value {
+        font-size: 1.25rem;
+    }
+
+    .stat-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .stat-icon i {
+        font-size: 1.25rem;
+    }
+
+    .filter-card .card-body {
+        padding: 1rem;
+    }
+
+    .card-header {
+        padding: 0.875rem 1rem;
+    }
+
+    .table > thead > tr > th,
+    .table > tbody > tr > td {
+        padding: 0.75rem;
+        font-size: 0.8125rem;
+    }
+
+    .action-btn {
+        width: 28px;
+        height: 28px;
+    }
+
+    .pagination-info {
+        width: 100%;
+        text-align: center;
+    }
+
+    .pagination {
+        justify-content: center;
+    }
+
+    .code-icon {
+        width: 36px;
+        height: 36px;
+    }
+
+    .code-icon i {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .page-header-title {
+        border-right: none !important;
+        margin-right: 0 !important;
+        padding-right: 0 !important;
+    }
+    .page-header-title h5 {
+        margin-bottom: 5px !important;
+    }
+    .action-buttons {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
 .pagination {
     margin-bottom: 0;
     gap: 0.25rem;
@@ -948,10 +1022,10 @@ function refreshPage() {
 
 function deleteKode(id, kode, keterangan) {
     Swal.fire({
-        title: 'Hapus Kode Transaksi?',
+        title: 'Hapus Kode Mutasi?',
         html: `
             <div class="text-start">
-                <p>Apakah Anda yakin ingin menghapus kode transaksi ini?</p>
+                <p>Apakah Anda yakin ingin menghapus Kode Mutasi ini?</p>
                 <div class="alert alert-light border p-3 rounded-3">
                     <div class="mb-2">
                         <strong class="text-primary">Kode:</strong>
@@ -987,7 +1061,7 @@ function showCannotDeleteAlert(kode, totalTransaksi) {
         title: 'Tidak Dapat Menghapus',
         html: `
             <div class="text-start">
-                <p class="mb-3">Kode transaksi <strong class="text-primary">"${kode}"</strong> tidak dapat dihapus karena:</p>
+                <p class="mb-3">Kode Mutasi <strong class="text-primary">"${kode}"</strong> tidak dapat dihapus karena:</p>
                 <div class="alert alert-warning border-0 bg-soft-warning">
                     <i class="feather-file-text me-2"></i>
                     <strong>${totalTransaksi} transaksi</strong> menggunakan kode ini
