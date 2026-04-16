@@ -1,3 +1,6 @@
+<?php
+ini_set('memory_limit', '1024M')
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -252,5 +255,13 @@ NIP. {{ $setting->nip_bendahara }}
 Dicetak otomatis pada {{ Carbon::now()->translatedFormat('d F Y H:i') }} WIB
 </div>
 
+<table class="ringkasan">
+<tr>
+<td class="label">Keterangan :</td>
+<td>Perubahan Saldo = Saldo Akhir - Saldo Awal</td>
+<td>Cash Ratio = Pemasukan / Pengeluaran x 100</td>
+</tr>
+
+</table>
 </body>
 </html>

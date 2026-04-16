@@ -266,7 +266,28 @@
                             <label class="info-label">Terbilang</label>
                             <div class="terbilang-box">
                                 <i class="feather-book-open me-1"></i>
-                                {{ $invoice->terbilang ?: '—' }}
+                                @php
+                                    $terbilangText = $invoice->terbilang;
+                                    if (empty($terbilangText) && $invoice->total > 0) {
+                                        if (!function_exists('terbilangHelper')) {
+                                            function terbilangHelper($n) {
+                                                $kata = ['', 'satu', 'dua', 'tiga', 'empat', 'lima', 'enam', 'tujuh', 'delapan', 'sembilan', 'sepuluh', 'sebelas'];
+                                                if ($n < 12) return $kata[$n];
+                                                if ($n < 20) return $kata[$n - 10] . ' belas';
+                                                if ($n < 100) return $kata[intval($n/10)] . ' puluh' . ($n%10 ? ' '.$kata[$n%10] : '');
+                                                if ($n < 200) return 'seratus' . ($n%100 ? ' '.terbilangHelper($n%100) : '');
+                                                if ($n < 1000) return $kata[intval($n/100)] . ' ratus' . ($n%100 ? ' '.terbilangHelper($n%100) : '');
+                                                if ($n < 2000) return 'seribu' . ($n%1000 ? ' '.terbilangHelper($n%1000) : '');
+                                                if ($n < 1000000) return terbilangHelper(intval($n/1000)) . ' ribu' . ($n%1000 ? ' '.terbilangHelper($n%1000) : '');
+                                                if ($n < 1000000000) return terbilangHelper(intval($n/1000000)) . ' juta' . ($n%1000000 ? ' '.terbilangHelper($n%1000000) : '');
+                                                return terbilangHelper(intval($n/1000000000)) . ' miliar' . ($n%1000000000 ? ' '.terbilangHelper($n%1000000000) : '');
+                                            }
+                                        }
+                                        $tb = terbilangHelper((int) round($invoice->total));
+                                        $terbilangText = '"' . ucfirst($tb) . ' Rupiah"';
+                                    }
+                                @endphp
+                                {{ $terbilangText ?: '—' }}
                             </div>
                         </div>
                     </div>

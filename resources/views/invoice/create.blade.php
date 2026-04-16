@@ -265,6 +265,11 @@
                                 </div>
                             </div>
 
+                            {{-- Hidden inputs untuk nilai kalkulasi dari sidebar --}}
+                            <input type="hidden" name="subtotal" id="subtotalInputForm" value="{{ old('subtotal', 0) }}">
+                            <input type="hidden" name="sales_tax" id="salesTaxInputForm" value="{{ old('sales_tax', 0) }}">
+                            <input type="hidden" name="total" id="totalInputForm" value="{{ old('total', 0) }}">
+
                             <hr class="my-4">
 
                             <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
@@ -1038,6 +1043,11 @@ function hitungSemua() {
     document.getElementById('salesTaxInput').value   = Math.round(salesTax);
     document.getElementById('totalDisplay').value    = fmt(total);
     document.getElementById('totalInput').value      = Math.round(total);
+
+    // Sync ke hidden inputs di dalam form (agar ikut ter-submit)
+    document.getElementById('subtotalInputForm').value = Math.round(subtotal);
+    document.getElementById('salesTaxInputForm').value = Math.round(salesTax);
+    document.getElementById('totalInputForm').value    = Math.round(total);
 
     const tb = terbilang(total);
     document.getElementById('terbilangDisplay').value =
