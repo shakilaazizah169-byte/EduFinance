@@ -129,7 +129,7 @@
                             <select name="month" class="form-select">
                                 <option value="">Semua Bulan</option>
                                 @foreach($months as $k => $v)
-                                    <option value="{{ $k }}" {{ request('month') == $k ? 'selected' : '' }}>{{ $v }}</option>
+                                <option value="{{ $k }}" {{ request('month') == $k ? 'selected' : '' }}>{{ $v }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -138,7 +138,7 @@
                             <select name="year" class="form-select">
                                 <option value="">Semua Tahun</option>
                                 @foreach($years as $th)
-                                    <option value="{{ $th }}" {{ request('year') == $th ? 'selected' : '' }}>{{ $th }}</option>
+                                <option value="{{ $th }}" {{ request('year') == $th ? 'selected' : '' }}>{{ $th }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -147,16 +147,16 @@
                                 <div class="col-6">
                                     <label class="form-label">Tanggal Mulai</label>
                                     <div class="custom-date-input" id="startDateWrapper">
-                                        <input type="text" 
-                                               name="start_date_display" 
-                                               id="startDateDisplay"
-                                               class="form-control date-display" 
-                                               placeholder="Pilih tanggal mulai"
-                                               value="{{ request('start_date') ? \Carbon\Carbon::parse(request('start_date'))->format('d/m/Y') : '' }}"
-                                               readonly>
+                                        <input type="text"
+                                            name="start_date_display"
+                                            id="startDateDisplay"
+                                            class="form-control date-display"
+                                            placeholder="Pilih tanggal mulai"
+                                            value="{{ request('start_date') ? \Carbon\Carbon::parse(request('start_date'))->format('d/m/Y') : '' }}"
+                                            readonly>
                                         <input type="hidden" name="start_date" id="startDate" value="{{ request('start_date') ?? '' }}">
                                         <i class="feather-calendar calendar-icon"></i>
-                                        
+
                                         <!-- Custom Date Picker -->
                                         <div class="custom-date-picker" id="startDatePicker">
                                             <div class="date-picker-header">
@@ -182,16 +182,16 @@
                                 <div class="col-6">
                                     <label class="form-label">Tanggal Akhir</label>
                                     <div class="custom-date-input" id="endDateWrapper">
-                                        <input type="text" 
-                                               name="end_date_display" 
-                                               id="endDateDisplay"
-                                               class="form-control date-display" 
-                                               placeholder="Pilih tanggal akhir"
-                                               value="{{ request('end_date') ? \Carbon\Carbon::parse(request('end_date'))->format('d/m/Y') : '' }}"
-                                               readonly>
+                                        <input type="text"
+                                            name="end_date_display"
+                                            id="endDateDisplay"
+                                            class="form-control date-display"
+                                            placeholder="Pilih tanggal akhir"
+                                            value="{{ request('end_date') ? \Carbon\Carbon::parse(request('end_date'))->format('d/m/Y') : '' }}"
+                                            readonly>
                                         <input type="hidden" name="end_date" id="endDate" value="{{ request('end_date') ?? '' }}">
                                         <i class="feather-calendar calendar-icon"></i>
-                                        
+
                                         <!-- Custom Date Picker -->
                                         <div class="custom-date-picker" id="endDatePicker">
                                             <div class="date-picker-header">
@@ -233,36 +233,36 @@
                     <div class="active-filters">
                         <span class="active-filters-label">Filter aktif:</span>
                         @if(request('month'))
-                            <span class="filter-badge">
-                                <i class="feather-calendar me-1"></i>Bulan: {{ $months[request('month')] ?? '' }}
-                                <a href="{{ route('mutasi-kas.index', array_merge(request()->except('month'), ['page' => 1])) }}" class="filter-badge-remove">
-                                    <i class="feather-x"></i>
-                                </a>
-                            </span>
+                        <span class="filter-badge">
+                            <i class="feather-calendar me-1"></i>Bulan: {{ $months[request('month')] ?? '' }}
+                            <a href="{{ route('mutasi-kas.index', array_merge(request()->except('month'), ['page' => 1])) }}" class="filter-badge-remove">
+                                <i class="feather-x"></i>
+                            </a>
+                        </span>
                         @endif
                         @if(request('year'))
-                            <span class="filter-badge">
-                                <i class="feather-calendar me-1"></i>Tahun: {{ request('year') }}
-                                <a href="{{ route('mutasi-kas.index', array_merge(request()->except('year'), ['page' => 1])) }}" class="filter-badge-remove">
-                                    <i class="feather-x"></i>
-                                </a>
-                            </span>
+                        <span class="filter-badge">
+                            <i class="feather-calendar me-1"></i>Tahun: {{ request('year') }}
+                            <a href="{{ route('mutasi-kas.index', array_merge(request()->except('year'), ['page' => 1])) }}" class="filter-badge-remove">
+                                <i class="feather-x"></i>
+                            </a>
+                        </span>
                         @endif
                         @if(request('start_date'))
-                            <span class="filter-badge">
-                                <i class="feather-calendar me-1"></i>Mulai: {{ \Carbon\Carbon::parse(request('start_date'))->format('d/m/Y') }}
-                                <a href="{{ route('mutasi-kas.index', array_merge(request()->except('start_date'), ['page' => 1])) }}" class="filter-badge-remove">
-                                    <i class="feather-x"></i>
-                                </a>
-                            </span>
+                        <span class="filter-badge">
+                            <i class="feather-calendar me-1"></i>Mulai: {{ \Carbon\Carbon::parse(request('start_date'))->format('d/m/Y') }}
+                            <a href="{{ route('mutasi-kas.index', array_merge(request()->except('start_date'), ['page' => 1])) }}" class="filter-badge-remove">
+                                <i class="feather-x"></i>
+                            </a>
+                        </span>
                         @endif
                         @if(request('end_date'))
-                            <span class="filter-badge">
-                                <i class="feather-calendar me-1"></i>Akhir: {{ \Carbon\Carbon::parse(request('end_date'))->format('d/m/Y') }}
-                                <a href="{{ route('mutasi-kas.index', array_merge(request()->except('end_date'), ['page' => 1])) }}" class="filter-badge-remove">
-                                    <i class="feather-x"></i>
-                                </a>
-                            </span>
+                        <span class="filter-badge">
+                            <i class="feather-calendar me-1"></i>Akhir: {{ \Carbon\Carbon::parse(request('end_date'))->format('d/m/Y') }}
+                            <a href="{{ route('mutasi-kas.index', array_merge(request()->except('end_date'), ['page' => 1])) }}" class="filter-badge-remove">
+                                <i class="feather-x"></i>
+                            </a>
+                        </span>
                         @endif
                     </div>
                     @endif
@@ -371,6 +371,82 @@
                             </tr>
                             @endforelse
                         </tbody>
+                        <tbody>
+                            @foreach($m->evidences as $ei => $ev)
+                            <tr>
+                                <td class="text-muted">{{ $ei + 1 }}</td>
+                                <td><code class="text-primary" style="font-size:11px">{{ $ev->evidence_number }}</code></td>
+                                <td>{{ $ev->evidence_date ? \Carbon\Carbon::parse($ev->evidence_date)->format('d/m/Y') : '<span class="text-muted">—</span>' }}</td>
+                                <td>
+                                    <span class="badge {{ $ev->type_badge }}" style="font-size:10px">
+                                        {{ $ev->type_label }}
+                                    </span>
+                                </td>
+                                <td>{{ $ev->evidence_title }}</td>
+                                <td class="text-end fw-semibold">
+                                    Rp {{ number_format($ev->evidence_amount, 0, ',', '.') }}
+                                </td>
+                                <td class="text-center">
+                                    @if($ev->evidence_file)
+                                    <a href="{{ Storage::url($ev->evidence_file) }}" target="_blank"
+                                        class="btn btn-xs btn-icon btn-light-brand" style="padding:2px 6px"
+                                        title="Lihat File">
+                                        <i class="feather-paperclip" style="font-size:11px"></i>
+                                    </a>
+                                    @else
+                                    <span class="text-muted">—</span>
+                                    @endif
+                                </td>
+                            </tr>
+                            @endforeach
+                            <tr style="border-top:1px solid #dee2e6;background:#eef2ff">
+                                <td colspan="5" class="text-end fw-semibold" style="font-size:11px">
+                                    Total Bukti ({{ $m->evidences->count() }} item):
+                                </td>
+                                <td class="text-end fw-bold text-primary" style="font-size:12px">
+                                    Rp {{ number_format($m->total_evidences_amount, 0, ',', '.') }}
+                                </td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            @foreach($m->evidences as $ei => $ev)
+                            <tr>
+                                <td class="text-muted">{{ $ei + 1 }}</td>
+                                <td><code class="text-primary" style="font-size:11px">{{ $ev->evidence_number }}</code></td>
+                                <td>{{ $ev->evidence_date ? \Carbon\Carbon::parse($ev->evidence_date)->format('d/m/Y') : '<span class="text-muted">—</span>' }}</td>
+                                <td>
+                                    <span class="badge {{ $ev->type_badge }}" style="font-size:10px">
+                                        {{ $ev->type_label }}
+                                    </span>
+                                </td>
+                                <td>{{ $ev->evidence_title }}</td>
+                                <td class="text-end fw-semibold">
+                                    Rp {{ number_format($ev->evidence_amount, 0, ',', '.') }}
+                                </td>
+                                <td class="text-center">
+                                    @if($ev->evidence_file)
+                                    <a href="{{ Storage::url($ev->evidence_file) }}" target="_blank"
+                                        class="btn btn-xs btn-icon btn-light-brand" style="padding:2px 6px"
+                                        title="Lihat File">
+                                        <i class="feather-paperclip" style="font-size:11px"></i>
+                                    </a>
+                                    @else
+                                    <span class="text-muted">—</span>
+                                    @endif
+                                </td>
+                            </tr>
+                            @endforeach
+                            <tr style="border-top:1px solid #dee2e6;background:#eef2ff">
+                                <td colspan="5" class="text-end fw-semibold" style="font-size:11px">
+                                    Total Bukti ({{ $m->evidences->count() }} item):
+                                </td>
+                                <td class="text-end fw-bold text-primary" style="font-size:12px">
+                                    Rp {{ number_format($m->total_evidences_amount, 0, ',', '.') }}
+                                </td>
+                                <td></td>
+                            </tr>
+                        </tbody>
                         @if($mutasi->count() && ($totalDebit > 0 || $totalKredit > 0))
                         <tfoot>
                             <tr>
@@ -412,1094 +488,1116 @@
 
 @push('styles')
 <style>
-/* ============================================
+    /* ============================================
    VARIABLES
    ============================================ */
-:root {
-    --primary-color: #3454D1;
-    --primary-dark: #1e3a8a;
-    --success-color: #25B003;
-    --info-color: #17a2b8;
-    --warning-color: #ffc107;
-    --danger-color: #dc3545;
-    --border-color: #e9ecef;
-    --bg-soft: #f8f9fa;
-}
+    :root {
+        --primary-color: #3454D1;
+        --primary-dark: #1e3a8a;
+        --success-color: #25B003;
+        --info-color: #17a2b8;
+        --warning-color: #ffc107;
+        --danger-color: #dc3545;
+        --border-color: #e9ecef;
+        --bg-soft: #f8f9fa;
+    }
 
-/* ============================================
+    /* ============================================
    CARD STYLES
    ============================================ */
-.card {
-    border: none;
-    border-radius: 1rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    transition: box-shadow 0.2s ease;
-}
-
-.card:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.card-header {
-    background: transparent;
-    border-bottom: 1px solid var(--border-color);
-    padding: 1rem 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-}
-
-.card-header h5 {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: #2c3e50;
-    margin-bottom: 0;
-}
-
-.card-footer {
-    background: transparent;
-    border-top: 1px solid var(--border-color);
-    padding: 1rem 1.5rem;
-}
-
-/* ============================================
-   STATISTICS CARDS
-   ============================================ */
-.stat-card .card-body {
-    padding: 1.25rem;
-}
-
-.stat-value {
-    font-size: 1.5rem;
-    font-weight: 700;
-    line-height: 1.3;
-    word-break: break-word;
-    white-space: normal;
-}
-
-.stat-label {
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-top: 0.25rem;
-}
-
-.stat-icon {
-    width: 48px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 0.75rem;
-    transition: transform 0.2s ease;
-    flex-shrink: 0;
-}
-
-.stat-card:hover .stat-icon {
-    transform: scale(1.05);
-}
-
-.stat-icon i {
-    font-size: 1.5rem;
-}
-
-/* Soft Background Colors */
-.bg-primary-soft { background-color: rgba(52, 84, 209, 0.1); }
-.bg-success-soft { background-color: rgba(37, 176, 3, 0.1); }
-.bg-info-soft { background-color: rgba(23, 162, 184, 0.1); }
-.bg-warning-soft { background-color: rgba(255, 193, 7, 0.1); }
-.bg-danger-soft { background-color: rgba(220, 53, 69, 0.1); }
-
-/* Badge soft colors */
-.badge.bg-soft-success {
-    background-color: rgba(37, 176, 3, 0.1);
-    color: #25B003;
-    font-weight: 500;
-    padding: 0.375rem 0.75rem;
-    border-radius: 2rem;
-}
-
-.badge.bg-soft-danger {
-    background-color: rgba(220, 53, 69, 0.1);
-    color: #dc3545;
-    font-weight: 500;
-    padding: 0.375rem 0.75rem;
-    border-radius: 2rem;
-}
-
-/* ============================================
-   FILTER STYLES
-   ============================================ */
-.filter-card {
-    margin-bottom: 1.5rem;
-}
-
-.filter-card .card-body {
-    padding: 1.5rem;
-}
-
-.form-label {
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-    color: #6c757d;
-    margin-bottom: 0.5rem;
-    display: block;
-}
-
-.form-select, .form-control {
-    border-radius: 0.625rem;
-    border: 1px solid #e2e8f0;
-    padding: 0.625rem 0.875rem;
-    font-size: 0.875rem;
-    transition: all 0.2s ease;
-    background-color: #ffffff;
-}
-
-.form-select:focus, .form-control:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(52, 84, 209, 0.1);
-    outline: none;
-}
-
-.form-select:hover, .form-control:hover {
-    border-color: #cbd5e0;
-}
-
-/* Buttons */
-.btn-primary {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-    border: none;
-    border-radius: 0.625rem;
-    padding: 0.625rem 1.25rem;
-    font-weight: 500;
-    transition: all 0.2s ease;
-}
-
-.btn-primary:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(52, 84, 209, 0.25);
-}
-
-.btn-outline-secondary {
-    border-radius: 0.625rem;
-    padding: 0.625rem 1rem;
-    border-color: #e2e8f0;
-    color: #6c757d;
-    transition: all 0.2s ease;
-}
-
-.btn-outline-secondary:hover {
-    background-color: var(--bg-soft);
-    border-color: #cbd5e0;
-    transform: translateY(-1px);
-}
-
-.btn-icon {
-    width: 38px;
-    height: 38px;
-    padding: 0;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 0.625rem;
-}
-
-/* Active Filters */
-.active-filters {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.75rem;
-    margin-top: 1.25rem;
-    padding-top: 1.25rem;
-    border-top: 1px solid var(--border-color);
-}
-
-.active-filters-label {
-    font-size: 0.7rem;
-    font-weight: 500;
-    color: #6c757d;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.filter-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.375rem 0.75rem;
-    background-color: #f1f5f9;
-    border-radius: 2rem;
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: #1e293b;
-}
-
-.filter-badge i {
-    font-size: 0.75rem;
-}
-
-.filter-badge-remove {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background-color: #cbd5e1;
-    color: white;
-    text-decoration: none;
-    transition: all 0.2s ease;
-}
-
-.filter-badge-remove i {
-    font-size: 0.625rem;
-}
-
-.filter-badge-remove:hover {
-    background-color: var(--danger-color);
-    transform: scale(1.1);
-}
-
-/* ============================================
-   CUSTOM DATE PICKER STYLES (SAMA DENGAN LAPORAN)
-   ============================================ */
-.custom-date-input {
-    position: relative;
-    width: 100%;
-}
-
-.custom-date-input .date-display {
-    background-color: white;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.625rem;
-    padding: 0.625rem 2.5rem 0.625rem 0.875rem;
-    font-size: 0.875rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.custom-date-input .date-display:hover {
-    border-color: var(--primary-color);
-    background-color: #f8fafc;
-}
-
-.custom-date-input .calendar-icon {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #9ca3af;
-    pointer-events: none;
-}
-
-.custom-date-input:hover .calendar-icon {
-    color: var(--primary-color);
-}
-
-.custom-date-picker {
-    position: absolute;
-    top: calc(100% + 8px);
-    left: 0;
-    width: 320px;
-    background: white;
-    border-radius: 1rem;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-    z-index: 1000;
-    padding: 1rem;
-    display: none;
-    animation: slideDown 0.2s ease;
-}
-
-.custom-date-picker.show {
-    display: block;
-}
-
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.date-picker-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-}
-
-.month-nav {
-    width: 32px;
-    height: 32px;
-    border: none;
-    background: #f8f9fa;
-    border-radius: 0.5rem;
-    color: #495057;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-}
-
-.month-nav:hover {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-    color: white;
-}
-
-.month-year {
-    font-weight: 600;
-    font-size: 0.875rem;
-    color: #2c3e50;
-}
-
-.date-picker-weekdays {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    text-align: center;
-    margin-bottom: 0.5rem;
-}
-
-.date-picker-weekdays span {
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: #9ca3af;
-    padding: 0.5rem 0;
-}
-
-.date-picker-days {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 2px;
-}
-
-.date-picker-days button {
-    aspect-ratio: 1;
-    border: none;
-    background: transparent;
-    font-size: 0.75rem;
-    color: #2c3e50;
-    cursor: pointer;
-    border-radius: 0.5rem;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 500;
-}
-
-.date-picker-days button:hover:not(.empty) {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-    color: white;
-}
-
-.date-picker-days button.today {
-    background-color: #e9ecef;
-    font-weight: 700;
-    color: var(--primary-color);
-    border: 1px solid var(--primary-color);
-}
-
-.date-picker-days button.selected {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-    color: white;
-}
-
-.date-picker-days button.empty {
-    pointer-events: none;
-    color: #cbd5e0;
-}
-
-.date-picker-days button.prev-month,
-.date-picker-days button.next-month {
-    color: #cbd5e0;
-}
-
-.date-picker-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 0.5rem;
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border-color);
-}
-
-.btn-clear, .btn-today {
-    padding: 0.375rem 0.875rem;
-    border: none;
-    border-radius: 0.5rem;
-    font-size: 0.75rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.btn-clear {
-    background: #f8f9fa;
-    color: #6c757d;
-}
-
-.btn-clear:hover {
-    background: #e9ecef;
-    color: var(--danger-color);
-}
-
-.btn-today {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-    color: white;
-}
-
-.btn-today:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(52, 84, 209, 0.3);
-}
-
-/* ============================================
-   TABLE STYLES
-   ============================================ */
-.table-card {
-    overflow: hidden;
-}
-
-.table {
-    margin-bottom: 0;
-}
-
-.table > thead > tr > th {
-    background-color: var(--bg-soft);
-    font-weight: 600;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: #495057;
-    padding: 1rem;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.table > tbody > tr > td {
-    padding: 1rem;
-    vertical-align: middle;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.table > tbody > tr:hover {
-    background-color: rgba(52, 84, 209, 0.02);
-}
-
-.table > tfoot > tr > td {
-    background-color: var(--bg-soft);
-    font-weight: 600;
-    border-top: 2px solid var(--border-color);
-}
-
-/* Badges */
-.badge {
-    font-weight: 500;
-    font-size: 0.7rem;
-    padding: 0.375rem 0.75rem;
-    border-radius: 2rem;
-}
-
-.badge-primary-light {
-    background-color: rgba(52, 84, 209, 0.08);
-    color: var(--primary-color);
-}
-
-.badge-secondary-light {
-    background-color: rgba(108, 117, 125, 0.08);
-    color: #6c757d;
-}
-
-/* Date Info */
-.date-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.date-day {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: #2c3e50;
-}
-
-.date-time {
-    font-size: 0.7rem;
-    color: #9ca3af;
-}
-
-/* ============================================
-   PAGINATION STYLES
-   ============================================ */
-.pagination-info {
-    font-size: 0.75rem;
-    color: #6c757d;
-}
-
-.pagination {
-    margin-bottom: 0;
-    gap: 0.25rem;
-}
-
-.page-link {
-    border: 1px solid var(--border-color);
-    border-radius: 0.5rem !important;
-    padding: 0.5rem 0.875rem;
-    font-size: 0.8125rem;
-    font-weight: 500;
-    color: #4a5568;
-    background-color: white;
-    transition: all 0.2s ease;
-}
-
-.page-link:hover {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-    color: white;
-    transform: translateY(-1px);
-}
-
-.page-item.active .page-link {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-    border-color: var(--primary-color);
-    color: white;
-}
-
-.page-item.disabled .page-link {
-    color: #cbd5e0;
-    background-color: #f8fafc;
-}
-
-/* ============================================
-   EMPTY STATE STYLES
-   ============================================ */
-.empty-state {
-    text-align: center;
-    padding: 3rem 2rem;
-}
-
-.empty-state-icon {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--bg-soft);
-    border-radius: 2rem;
-    color: #9ca3af;
-}
-
-.empty-state-icon i {
-    font-size: 2.5rem;
-}
-
-.empty-state-title {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #2c3e50;
-    margin-bottom: 0.5rem;
-}
-
-.empty-state-text {
-    font-size: 0.875rem;
-    color: #9ca3af;
-    margin-bottom: 0;
-}
-
-/* ============================================
-   RESPONSIVE STYLES
-   ============================================ */
-@media (max-width: 768px) {
-    .stat-card .card-body {
-        padding: 1rem;
+    .card {
+        border: none;
+        border-radius: 1rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        transition: box-shadow 0.2s ease;
     }
 
-    .stat-value {
-        font-size: 1.1rem;
-        line-height: 1.4;
-    }
-
-    .stat-icon {
-        width: 36px;
-        height: 36px;
-    }
-
-    .stat-icon i {
-        font-size: 1rem;
-    }
-
-    .stat-label {
-        font-size: 0.6rem;
-    }
-
-    .filter-card .card-body {
-        padding: 1rem;
+    .card:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
 
     .card-header {
-        padding: 0.875rem 1rem;
-        flex-direction: column;
-        align-items: flex-start;
+        background: transparent;
+        border-bottom: 1px solid var(--border-color);
+        padding: 1rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.75rem;
     }
 
-    .table > thead > tr > th,
-    .table > tbody > tr > td {
-        padding: 0.75rem;
-        font-size: 0.8125rem;
-        white-space: nowrap;
+    .card-header h5 {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0;
     }
 
-    .pagination-info {
+    .card-footer {
+        background: transparent;
+        border-top: 1px solid var(--border-color);
+        padding: 1rem 1.5rem;
+    }
+
+    /* ============================================
+   STATISTICS CARDS
+   ============================================ */
+    .stat-card .card-body {
+        padding: 1.25rem;
+    }
+
+    .stat-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        line-height: 1.3;
+        word-break: break-word;
+        white-space: normal;
+    }
+
+    .stat-label {
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-top: 0.25rem;
+    }
+
+    .stat-icon {
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0.75rem;
+        transition: transform 0.2s ease;
+        flex-shrink: 0;
+    }
+
+    .stat-card:hover .stat-icon {
+        transform: scale(1.05);
+    }
+
+    .stat-icon i {
+        font-size: 1.5rem;
+    }
+
+    /* Soft Background Colors */
+    .bg-primary-soft {
+        background-color: rgba(52, 84, 209, 0.1);
+    }
+
+    .bg-success-soft {
+        background-color: rgba(37, 176, 3, 0.1);
+    }
+
+    .bg-info-soft {
+        background-color: rgba(23, 162, 184, 0.1);
+    }
+
+    .bg-warning-soft {
+        background-color: rgba(255, 193, 7, 0.1);
+    }
+
+    .bg-danger-soft {
+        background-color: rgba(220, 53, 69, 0.1);
+    }
+
+    /* Badge soft colors */
+    .badge.bg-soft-success {
+        background-color: rgba(37, 176, 3, 0.1);
+        color: #25B003;
+        font-weight: 500;
+        padding: 0.375rem 0.75rem;
+        border-radius: 2rem;
+    }
+
+    .badge.bg-soft-danger {
+        background-color: rgba(220, 53, 69, 0.1);
+        color: #dc3545;
+        font-weight: 500;
+        padding: 0.375rem 0.75rem;
+        border-radius: 2rem;
+    }
+
+    /* ============================================
+   FILTER STYLES
+   ============================================ */
+    .filter-card {
+        margin-bottom: 1.5rem;
+    }
+
+    .filter-card .card-body {
+        padding: 1.5rem;
+    }
+
+    .form-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        color: #6c757d;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .form-select,
+    .form-control {
+        border-radius: 0.625rem;
+        border: 1px solid #e2e8f0;
+        padding: 0.625rem 0.875rem;
+        font-size: 0.875rem;
+        transition: all 0.2s ease;
+        background-color: #ffffff;
+    }
+
+    .form-select:focus,
+    .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(52, 84, 209, 0.1);
+        outline: none;
+    }
+
+    .form-select:hover,
+    .form-control:hover {
+        border-color: #cbd5e0;
+    }
+
+    /* Buttons */
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        border: none;
+        border-radius: 0.625rem;
+        padding: 0.625rem 1.25rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(52, 84, 209, 0.25);
+    }
+
+    .btn-outline-secondary {
+        border-radius: 0.625rem;
+        padding: 0.625rem 1rem;
+        border-color: #e2e8f0;
+        color: #6c757d;
+        transition: all 0.2s ease;
+    }
+
+    .btn-outline-secondary:hover {
+        background-color: var(--bg-soft);
+        border-color: #cbd5e0;
+        transform: translateY(-1px);
+    }
+
+    .btn-icon {
+        width: 38px;
+        height: 38px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0.625rem;
+    }
+
+    /* Active Filters */
+    .active-filters {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.75rem;
+        margin-top: 1.25rem;
+        padding-top: 1.25rem;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .active-filters-label {
+        font-size: 0.7rem;
+        font-weight: 500;
+        color: #6c757d;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .filter-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.375rem 0.75rem;
+        background-color: #f1f5f9;
+        border-radius: 2rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: #1e293b;
+    }
+
+    .filter-badge i {
+        font-size: 0.75rem;
+    }
+
+    .filter-badge-remove {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background-color: #cbd5e1;
+        color: white;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .filter-badge-remove i {
+        font-size: 0.625rem;
+    }
+
+    .filter-badge-remove:hover {
+        background-color: var(--danger-color);
+        transform: scale(1.1);
+    }
+
+    /* ============================================
+   CUSTOM DATE PICKER STYLES (SAMA DENGAN LAPORAN)
+   ============================================ */
+    .custom-date-input {
+        position: relative;
         width: 100%;
+    }
+
+    .custom-date-input .date-display {
+        background-color: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 0.625rem;
+        padding: 0.625rem 2.5rem 0.625rem 0.875rem;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .custom-date-input .date-display:hover {
+        border-color: var(--primary-color);
+        background-color: #f8fafc;
+    }
+
+    .custom-date-input .calendar-icon {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #9ca3af;
+        pointer-events: none;
+    }
+
+    .custom-date-input:hover .calendar-icon {
+        color: var(--primary-color);
+    }
+
+    .custom-date-picker {
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        width: 320px;
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        z-index: 1000;
+        padding: 1rem;
+        display: none;
+        animation: slideDown 0.2s ease;
+    }
+
+    .custom-date-picker.show {
+        display: block;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .date-picker-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .month-nav {
+        width: 32px;
+        height: 32px;
+        border: none;
+        background: #f8f9fa;
+        border-radius: 0.5rem;
+        color: #495057;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+    }
+
+    .month-nav:hover {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        color: white;
+    }
+
+    .month-year {
+        font-weight: 600;
+        font-size: 0.875rem;
+        color: #2c3e50;
+    }
+
+    .date-picker-weekdays {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
         text-align: center;
         margin-bottom: 0.5rem;
     }
 
-    .pagination {
-        justify-content: center;
-        flex-wrap: wrap;
+    .date-picker-weekdays span {
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: #9ca3af;
+        padding: 0.5rem 0;
     }
 
-    .custom-date-picker {
-        width: 260px;
-        left: 50%;
-        transform: translateX(-50%);
+    .date-picker-days {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 2px;
     }
 
     .date-picker-days button {
+        aspect-ratio: 1;
+        border: none;
+        background: transparent;
+        font-size: 0.75rem;
+        color: #2c3e50;
+        cursor: pointer;
+        border-radius: 0.5rem;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 500;
+    }
+
+    .date-picker-days button:hover:not(.empty) {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        color: white;
+    }
+
+    .date-picker-days button.today {
+        background-color: #e9ecef;
+        font-weight: 700;
+        color: var(--primary-color);
+        border: 1px solid var(--primary-color);
+    }
+
+    .date-picker-days button.selected {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        color: white;
+    }
+
+    .date-picker-days button.empty {
+        pointer-events: none;
+        color: #cbd5e0;
+    }
+
+    .date-picker-days button.prev-month,
+    .date-picker-days button.next-month {
+        color: #cbd5e0;
+    }
+
+    .date-picker-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .btn-clear,
+    .btn-today {
+        padding: 0.375rem 0.875rem;
+        border: none;
+        border-radius: 0.5rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn-clear {
+        background: #f8f9fa;
+        color: #6c757d;
+    }
+
+    .btn-clear:hover {
+        background: #e9ecef;
+        color: var(--danger-color);
+    }
+
+    .btn-today {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        color: white;
+    }
+
+    .btn-today:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(52, 84, 209, 0.3);
+    }
+
+    /* ============================================
+   TABLE STYLES
+   ============================================ */
+    .table-card {
+        overflow: hidden;
+    }
+
+    .table {
+        margin-bottom: 0;
+    }
+
+    .table>thead>tr>th {
+        background-color: var(--bg-soft);
+        font-weight: 600;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #495057;
+        padding: 1rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .table>tbody>tr>td {
+        padding: 1rem;
+        vertical-align: middle;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .table>tbody>tr:hover {
+        background-color: rgba(52, 84, 209, 0.02);
+    }
+
+    .table>tfoot>tr>td {
+        background-color: var(--bg-soft);
+        font-weight: 600;
+        border-top: 2px solid var(--border-color);
+    }
+
+    /* Badges */
+    .badge {
+        font-weight: 500;
         font-size: 0.7rem;
-    }
-}
-
-@media (max-width: 576px) {
-    .stat-value {
-        font-size: 0.95rem;
+        padding: 0.375rem 0.75rem;
+        border-radius: 2rem;
     }
 
-    .page-header-title {
-        border-right: none !important;
-        margin-right: 0 !important;
-        padding-right: 0 !important;
+    .badge-primary-light {
+        background-color: rgba(52, 84, 209, 0.08);
+        color: var(--primary-color);
     }
 
-    .page-header-title h5 {
-        margin-bottom: 5px !important;
-    }
-    
-    .card-header .badge {
-        font-size: 0.65rem;
+    .badge-secondary-light {
+        background-color: rgba(108, 117, 125, 0.08);
+        color: #6c757d;
     }
 
-    .table-responsive {
-        border-radius: 0;
-        margin: 0 -1rem;
-        width: calc(100% + 2rem);
+    /* Date Info */
+    .date-info {
+        display: flex;
+        flex-direction: column;
     }
-}
+
+    .date-day {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #2c3e50;
+    }
+
+    .date-time {
+        font-size: 0.7rem;
+        color: #9ca3af;
+    }
+
+    /* ============================================
+   PAGINATION STYLES
+   ============================================ */
+    .pagination-info {
+        font-size: 0.75rem;
+        color: #6c757d;
+    }
+
+    .pagination {
+        margin-bottom: 0;
+        gap: 0.25rem;
+    }
+
+    .page-link {
+        border: 1px solid var(--border-color);
+        border-radius: 0.5rem !important;
+        padding: 0.5rem 0.875rem;
+        font-size: 0.8125rem;
+        font-weight: 500;
+        color: #4a5568;
+        background-color: white;
+        transition: all 0.2s ease;
+    }
+
+    .page-link:hover {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+        color: white;
+        transform: translateY(-1px);
+    }
+
+    .page-item.active .page-link {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        border-color: var(--primary-color);
+        color: white;
+    }
+
+    .page-item.disabled .page-link {
+        color: #cbd5e0;
+        background-color: #f8fafc;
+    }
+
+    /* ============================================
+   EMPTY STATE STYLES
+   ============================================ */
+    .empty-state {
+        text-align: center;
+        padding: 3rem 2rem;
+    }
+
+    .empty-state-icon {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--bg-soft);
+        border-radius: 2rem;
+        color: #9ca3af;
+    }
+
+    .empty-state-icon i {
+        font-size: 2.5rem;
+    }
+
+    .empty-state-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+
+    .empty-state-text {
+        font-size: 0.875rem;
+        color: #9ca3af;
+        margin-bottom: 0;
+    }
+
+    /* ============================================
+   RESPONSIVE STYLES
+   ============================================ */
+    @media (max-width: 768px) {
+        .stat-card .card-body {
+            padding: 1rem;
+        }
+
+        .stat-value {
+            font-size: 1.1rem;
+            line-height: 1.4;
+        }
+
+        .stat-icon {
+            width: 36px;
+            height: 36px;
+        }
+
+        .stat-icon i {
+            font-size: 1rem;
+        }
+
+        .stat-label {
+            font-size: 0.6rem;
+        }
+
+        .filter-card .card-body {
+            padding: 1rem;
+        }
+
+        .card-header {
+            padding: 0.875rem 1rem;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .table>thead>tr>th,
+        .table>tbody>tr>td {
+            padding: 0.75rem;
+            font-size: 0.8125rem;
+            white-space: nowrap;
+        }
+
+        .pagination-info {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .pagination {
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .custom-date-picker {
+            width: 260px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .date-picker-days button {
+            font-size: 0.7rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .stat-value {
+            font-size: 0.95rem;
+        }
+
+        .page-header-title {
+            border-right: none !important;
+            margin-right: 0 !important;
+            padding-right: 0 !important;
+        }
+
+        .page-header-title h5 {
+            margin-bottom: 5px !important;
+        }
+
+        .card-header .badge {
+            font-size: 0.65rem;
+        }
+
+        .table-responsive {
+            border-radius: 0;
+            margin: 0 -1rem;
+            width: calc(100% + 2rem);
+        }
+    }
 </style>
 @endpush
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize tooltips
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    tooltipTriggerList.forEach(function(tooltipTriggerEl) {
-        new bootstrap.Tooltip(tooltipTriggerEl);
-    });
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.forEach(function(tooltipTriggerEl) {
+            new bootstrap.Tooltip(tooltipTriggerEl);
+        });
 
-    // ========================================
-    // CUSTOM DATE PICKER (SAMA DENGAN LAPORAN)
-    // ========================================
-    
-    // Month names
-    const monthNames = [
-        'January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December'
-    ];
-    
-    // Current dates
-    let startCurrentDate = new Date();
-    let endCurrentDate = new Date();
-    
-    // Selected dates
-    let startSelectedDate = document.getElementById('startDate').value ? new Date(document.getElementById('startDate').value) : null;
-    let endSelectedDate = document.getElementById('endDate').value ? new Date(document.getElementById('endDate').value) : null;
-    
-    // Initialize if values exist
-    if (startSelectedDate) {
-        startCurrentDate = new Date(startSelectedDate);
-    }
-    if (endSelectedDate) {
-        endCurrentDate = new Date(endSelectedDate);
-    }
-    
-    // DOM Elements
-    const startWrapper = document.getElementById('startDateWrapper');
-    const endWrapper = document.getElementById('endDateWrapper');
-    const startPicker = document.getElementById('startDatePicker');
-    const endPicker = document.getElementById('endDatePicker');
-    const startDisplay = document.getElementById('startDateDisplay');
-    const endDisplay = document.getElementById('endDateDisplay');
-    
-    // Toggle date pickers
-    if (startWrapper) {
-        startWrapper.addEventListener('click', function(e) {
-            if (!e.target.closest('.custom-date-picker')) {
+        // ========================================
+        // CUSTOM DATE PICKER (SAMA DENGAN LAPORAN)
+        // ========================================
+
+        // Month names
+        const monthNames = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+
+        // Current dates
+        let startCurrentDate = new Date();
+        let endCurrentDate = new Date();
+
+        // Selected dates
+        let startSelectedDate = document.getElementById('startDate').value ? new Date(document.getElementById('startDate').value) : null;
+        let endSelectedDate = document.getElementById('endDate').value ? new Date(document.getElementById('endDate').value) : null;
+
+        // Initialize if values exist
+        if (startSelectedDate) {
+            startCurrentDate = new Date(startSelectedDate);
+        }
+        if (endSelectedDate) {
+            endCurrentDate = new Date(endSelectedDate);
+        }
+
+        // DOM Elements
+        const startWrapper = document.getElementById('startDateWrapper');
+        const endWrapper = document.getElementById('endDateWrapper');
+        const startPicker = document.getElementById('startDatePicker');
+        const endPicker = document.getElementById('endDatePicker');
+        const startDisplay = document.getElementById('startDateDisplay');
+        const endDisplay = document.getElementById('endDateDisplay');
+
+        // Toggle date pickers
+        if (startWrapper) {
+            startWrapper.addEventListener('click', function(e) {
+                if (!e.target.closest('.custom-date-picker')) {
+                    closeAllPickers();
+                    if (startPicker) startPicker.classList.add('show');
+                    renderStartCalendar();
+                }
+            });
+        }
+
+        if (endWrapper) {
+            endWrapper.addEventListener('click', function(e) {
+                if (!e.target.closest('.custom-date-picker')) {
+                    closeAllPickers();
+                    if (endPicker) endPicker.classList.add('show');
+                    renderEndCalendar();
+                }
+            });
+        }
+
+        // Close when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.custom-date-input')) {
                 closeAllPickers();
-                if (startPicker) startPicker.classList.add('show');
-                renderStartCalendar();
             }
         });
-    }
-    
-    if (endWrapper) {
-        endWrapper.addEventListener('click', function(e) {
-            if (!e.target.closest('.custom-date-picker')) {
-                closeAllPickers();
-                if (endPicker) endPicker.classList.add('show');
-                renderEndCalendar();
+
+        function closeAllPickers() {
+            if (startPicker) startPicker.classList.remove('show');
+            if (endPicker) endPicker.classList.remove('show');
+        }
+
+        // Render Start Calendar
+        function renderStartCalendar() {
+            const year = startCurrentDate.getFullYear();
+            const month = startCurrentDate.getMonth();
+
+            const startMonthYear = document.getElementById('startMonthYear');
+            if (startMonthYear) startMonthYear.textContent = `${monthNames[month]} ${year}`;
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const prevMonthDays = new Date(year, month, 0).getDate();
+
+            let html = '';
+
+            // Previous month days
+            for (let i = firstDay; i > 0; i--) {
+                const day = prevMonthDays - i + 1;
+                html += `<button type="button" class="prev-month" data-date="${year}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}">${day}</button>`;
             }
-        });
-    }
-    
-    // Close when clicking outside
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('.custom-date-input')) {
-            closeAllPickers();
+
+            // Current month days
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = new Date(year, month, day);
+                const isToday = isSameDay(date, new Date());
+                const isSelected = startSelectedDate && isSameDay(date, startSelectedDate);
+
+                let classes = '';
+                if (isToday) classes += ' today';
+                if (isSelected) classes += ' selected';
+
+                html += `<button type="button" class="${classes}" data-date="${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}">${day}</button>`;
+            }
+
+            // Next month days
+            const totalDays = firstDay + daysInMonth;
+            const remainingCells = 42 - totalDays;
+            for (let day = 1; day <= remainingCells; day++) {
+                html += `<button type="button" class="next-month" data-date="${year}-${String(month+2).padStart(2,'0')}-${String(day).padStart(2,'0')}">${day}</button>`;
+            }
+
+            const startDays = document.getElementById('startDays');
+            if (startDays) startDays.innerHTML = html;
+
+            // Add click handlers
+            document.querySelectorAll('#startDays button').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const dateStr = this.dataset.date;
+                    const selectedDate = new Date(dateStr);
+
+                    document.querySelectorAll('#startDays button').forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+
+                    startSelectedDate = selectedDate;
+
+                    const day = String(selectedDate.getDate()).padStart(2, '0');
+                    const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+                    const year = selectedDate.getFullYear();
+                    startDisplay.value = `${day}/${month}/${year}`;
+                    document.getElementById('startDate').value = `${year}-${month}-${day}`;
+
+                    startCurrentDate = new Date(selectedDate);
+                    if (startPicker) startPicker.classList.remove('show');
+                });
+            });
         }
-    });
-    
-    function closeAllPickers() {
-        if (startPicker) startPicker.classList.remove('show');
-        if (endPicker) endPicker.classList.remove('show');
-    }
-    
-    // Render Start Calendar
-    function renderStartCalendar() {
-        const year = startCurrentDate.getFullYear();
-        const month = startCurrentDate.getMonth();
-        
-        const startMonthYear = document.getElementById('startMonthYear');
-        if (startMonthYear) startMonthYear.textContent = `${monthNames[month]} ${year}`;
-        
-        const firstDay = new Date(year, month, 1).getDay();
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-        const prevMonthDays = new Date(year, month, 0).getDate();
-        
-        let html = '';
-        
-        // Previous month days
-        for (let i = firstDay; i > 0; i--) {
-            const day = prevMonthDays - i + 1;
-            html += `<button type="button" class="prev-month" data-date="${year}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}">${day}</button>`;
+
+        // Render End Calendar
+        function renderEndCalendar() {
+            const year = endCurrentDate.getFullYear();
+            const month = endCurrentDate.getMonth();
+
+            const endMonthYear = document.getElementById('endMonthYear');
+            if (endMonthYear) endMonthYear.textContent = `${monthNames[month]} ${year}`;
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const prevMonthDays = new Date(year, month, 0).getDate();
+
+            let html = '';
+
+            for (let i = firstDay; i > 0; i--) {
+                const day = prevMonthDays - i + 1;
+                html += `<button type="button" class="prev-month" data-date="${year}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}">${day}</button>`;
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = new Date(year, month, day);
+                const isToday = isSameDay(date, new Date());
+                const isSelected = endSelectedDate && isSameDay(date, endSelectedDate);
+
+                let classes = '';
+                if (isToday) classes += ' today';
+                if (isSelected) classes += ' selected';
+
+                html += `<button type="button" class="${classes}" data-date="${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}">${day}</button>`;
+            }
+
+            const totalDays = firstDay + daysInMonth;
+            const remainingCells = 42 - totalDays;
+            for (let day = 1; day <= remainingCells; day++) {
+                html += `<button type="button" class="next-month" data-date="${year}-${String(month+2).padStart(2,'0')}-${String(day).padStart(2,'0')}">${day}</button>`;
+            }
+
+            const endDays = document.getElementById('endDays');
+            if (endDays) endDays.innerHTML = html;
+
+            document.querySelectorAll('#endDays button').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const dateStr = this.dataset.date;
+                    const selectedDate = new Date(dateStr);
+
+                    document.querySelectorAll('#endDays button').forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+
+                    endSelectedDate = selectedDate;
+
+                    const day = String(selectedDate.getDate()).padStart(2, '0');
+                    const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+                    const year = selectedDate.getFullYear();
+                    endDisplay.value = `${day}/${month}/${year}`;
+                    document.getElementById('endDate').value = `${year}-${month}-${day}`;
+
+                    endCurrentDate = new Date(selectedDate);
+                    if (endPicker) endPicker.classList.remove('show');
+                });
+            });
         }
-        
-        // Current month days
-        for (let day = 1; day <= daysInMonth; day++) {
-            const date = new Date(year, month, day);
-            const isToday = isSameDay(date, new Date());
-            const isSelected = startSelectedDate && isSameDay(date, startSelectedDate);
-            
-            let classes = '';
-            if (isToday) classes += ' today';
-            if (isSelected) classes += ' selected';
-            
-            html += `<button type="button" class="${classes}" data-date="${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}">${day}</button>`;
+
+        // Helper function
+        function isSameDay(date1, date2) {
+            return date1.getDate() === date2.getDate() &&
+                date1.getMonth() === date2.getMonth() &&
+                date1.getFullYear() === date2.getFullYear();
         }
-        
-        // Next month days
-        const totalDays = firstDay + daysInMonth;
-        const remainingCells = 42 - totalDays;
-        for (let day = 1; day <= remainingCells; day++) {
-            html += `<button type="button" class="next-month" data-date="${year}-${String(month+2).padStart(2,'0')}-${String(day).padStart(2,'0')}">${day}</button>`;
-        }
-        
-        const startDays = document.getElementById('startDays');
-        if (startDays) startDays.innerHTML = html;
-        
-        // Add click handlers
-        document.querySelectorAll('#startDays button').forEach(btn => {
-            btn.addEventListener('click', function(e) {
+
+        // Month navigation
+        const startPrevMonth = document.getElementById('startPrevMonth');
+        const startNextMonth = document.getElementById('startNextMonth');
+        const endPrevMonth = document.getElementById('endPrevMonth');
+        const endNextMonth = document.getElementById('endNextMonth');
+
+        if (startPrevMonth) {
+            startPrevMonth.addEventListener('click', function(e) {
                 e.stopPropagation();
-                const dateStr = this.dataset.date;
-                const selectedDate = new Date(dateStr);
-                
-                document.querySelectorAll('#startDays button').forEach(b => b.classList.remove('selected'));
-                this.classList.add('selected');
-                
-                startSelectedDate = selectedDate;
-                
-                const day = String(selectedDate.getDate()).padStart(2, '0');
-                const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
-                const year = selectedDate.getFullYear();
+                startCurrentDate.setMonth(startCurrentDate.getMonth() - 1);
+                renderStartCalendar();
+            });
+        }
+
+        if (startNextMonth) {
+            startNextMonth.addEventListener('click', function(e) {
+                e.stopPropagation();
+                startCurrentDate.setMonth(startCurrentDate.getMonth() + 1);
+                renderStartCalendar();
+            });
+        }
+
+        if (endPrevMonth) {
+            endPrevMonth.addEventListener('click', function(e) {
+                e.stopPropagation();
+                endCurrentDate.setMonth(endCurrentDate.getMonth() - 1);
+                renderEndCalendar();
+            });
+        }
+
+        if (endNextMonth) {
+            endNextMonth.addEventListener('click', function(e) {
+                e.stopPropagation();
+                endCurrentDate.setMonth(endCurrentDate.getMonth() + 1);
+                renderEndCalendar();
+            });
+        }
+
+        // Clear buttons
+        const startClear = document.getElementById('startClear');
+        const endClear = document.getElementById('endClear');
+
+        if (startClear) {
+            startClear.addEventListener('click', function(e) {
+                e.stopPropagation();
+                startDisplay.value = '';
+                document.getElementById('startDate').value = '';
+                startSelectedDate = null;
+                renderStartCalendar();
+            });
+        }
+
+        if (endClear) {
+            endClear.addEventListener('click', function(e) {
+                e.stopPropagation();
+                endDisplay.value = '';
+                document.getElementById('endDate').value = '';
+                endSelectedDate = null;
+                renderEndCalendar();
+            });
+        }
+
+        // Today buttons
+        const startToday = document.getElementById('startToday');
+        const endToday = document.getElementById('endToday');
+
+        if (startToday) {
+            startToday.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const today = new Date();
+                startCurrentDate = new Date(today);
+                startSelectedDate = new Date(today);
+
+                const day = String(today.getDate()).padStart(2, '0');
+                const month = String(today.getMonth() + 1).padStart(2, '0');
+                const year = today.getFullYear();
                 startDisplay.value = `${day}/${month}/${year}`;
                 document.getElementById('startDate').value = `${year}-${month}-${day}`;
-                
-                startCurrentDate = new Date(selectedDate);
+
+                renderStartCalendar();
                 if (startPicker) startPicker.classList.remove('show');
             });
-        });
-    }
-    
-    // Render End Calendar
-    function renderEndCalendar() {
-        const year = endCurrentDate.getFullYear();
-        const month = endCurrentDate.getMonth();
-        
-        const endMonthYear = document.getElementById('endMonthYear');
-        if (endMonthYear) endMonthYear.textContent = `${monthNames[month]} ${year}`;
-        
-        const firstDay = new Date(year, month, 1).getDay();
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-        const prevMonthDays = new Date(year, month, 0).getDate();
-        
-        let html = '';
-        
-        for (let i = firstDay; i > 0; i--) {
-            const day = prevMonthDays - i + 1;
-            html += `<button type="button" class="prev-month" data-date="${year}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}">${day}</button>`;
         }
-        
-        for (let day = 1; day <= daysInMonth; day++) {
-            const date = new Date(year, month, day);
-            const isToday = isSameDay(date, new Date());
-            const isSelected = endSelectedDate && isSameDay(date, endSelectedDate);
-            
-            let classes = '';
-            if (isToday) classes += ' today';
-            if (isSelected) classes += ' selected';
-            
-            html += `<button type="button" class="${classes}" data-date="${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}">${day}</button>`;
-        }
-        
-        const totalDays = firstDay + daysInMonth;
-        const remainingCells = 42 - totalDays;
-        for (let day = 1; day <= remainingCells; day++) {
-            html += `<button type="button" class="next-month" data-date="${year}-${String(month+2).padStart(2,'0')}-${String(day).padStart(2,'0')}">${day}</button>`;
-        }
-        
-        const endDays = document.getElementById('endDays');
-        if (endDays) endDays.innerHTML = html;
-        
-        document.querySelectorAll('#endDays button').forEach(btn => {
-            btn.addEventListener('click', function(e) {
+
+        if (endToday) {
+            endToday.addEventListener('click', function(e) {
                 e.stopPropagation();
-                const dateStr = this.dataset.date;
-                const selectedDate = new Date(dateStr);
-                
-                document.querySelectorAll('#endDays button').forEach(b => b.classList.remove('selected'));
-                this.classList.add('selected');
-                
-                endSelectedDate = selectedDate;
-                
-                const day = String(selectedDate.getDate()).padStart(2, '0');
-                const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
-                const year = selectedDate.getFullYear();
+                const today = new Date();
+                endCurrentDate = new Date(today);
+                endSelectedDate = new Date(today);
+
+                const day = String(today.getDate()).padStart(2, '0');
+                const month = String(today.getMonth() + 1).padStart(2, '0');
+                const year = today.getFullYear();
                 endDisplay.value = `${day}/${month}/${year}`;
                 document.getElementById('endDate').value = `${year}-${month}-${day}`;
-                
-                endCurrentDate = new Date(selectedDate);
+
+                renderEndCalendar();
                 if (endPicker) endPicker.classList.remove('show');
             });
-        });
-    }
-    
-    // Helper function
-    function isSameDay(date1, date2) {
-        return date1.getDate() === date2.getDate() &&
-               date1.getMonth() === date2.getMonth() &&
-               date1.getFullYear() === date2.getFullYear();
-    }
-    
-    // Month navigation
-    const startPrevMonth = document.getElementById('startPrevMonth');
-    const startNextMonth = document.getElementById('startNextMonth');
-    const endPrevMonth = document.getElementById('endPrevMonth');
-    const endNextMonth = document.getElementById('endNextMonth');
-    
-    if (startPrevMonth) {
-        startPrevMonth.addEventListener('click', function(e) {
-            e.stopPropagation();
-            startCurrentDate.setMonth(startCurrentDate.getMonth() - 1);
-            renderStartCalendar();
-        });
-    }
-    
-    if (startNextMonth) {
-        startNextMonth.addEventListener('click', function(e) {
-            e.stopPropagation();
-            startCurrentDate.setMonth(startCurrentDate.getMonth() + 1);
-            renderStartCalendar();
-        });
-    }
-    
-    if (endPrevMonth) {
-        endPrevMonth.addEventListener('click', function(e) {
-            e.stopPropagation();
-            endCurrentDate.setMonth(endCurrentDate.getMonth() - 1);
-            renderEndCalendar();
-        });
-    }
-    
-    if (endNextMonth) {
-        endNextMonth.addEventListener('click', function(e) {
-            e.stopPropagation();
-            endCurrentDate.setMonth(endCurrentDate.getMonth() + 1);
-            renderEndCalendar();
-        });
-    }
-    
-    // Clear buttons
-    const startClear = document.getElementById('startClear');
-    const endClear = document.getElementById('endClear');
-    
-    if (startClear) {
-        startClear.addEventListener('click', function(e) {
-            e.stopPropagation();
-            startDisplay.value = '';
-            document.getElementById('startDate').value = '';
-            startSelectedDate = null;
-            renderStartCalendar();
-        });
-    }
-    
-    if (endClear) {
-        endClear.addEventListener('click', function(e) {
-            e.stopPropagation();
-            endDisplay.value = '';
-            document.getElementById('endDate').value = '';
-            endSelectedDate = null;
-            renderEndCalendar();
-        });
-    }
-    
-    // Today buttons
-    const startToday = document.getElementById('startToday');
-    const endToday = document.getElementById('endToday');
-    
-    if (startToday) {
-        startToday.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const today = new Date();
-            startCurrentDate = new Date(today);
-            startSelectedDate = new Date(today);
-            
-            const day = String(today.getDate()).padStart(2, '0');
-            const month = String(today.getMonth() + 1).padStart(2, '0');
-            const year = today.getFullYear();
-            startDisplay.value = `${day}/${month}/${year}`;
-            document.getElementById('startDate').value = `${year}-${month}-${day}`;
-            
-            renderStartCalendar();
-            if (startPicker) startPicker.classList.remove('show');
-        });
-    }
-    
-    if (endToday) {
-        endToday.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const today = new Date();
-            endCurrentDate = new Date(today);
-            endSelectedDate = new Date(today);
-            
-            const day = String(today.getDate()).padStart(2, '0');
-            const month = String(today.getMonth() + 1).padStart(2, '0');
-            const year = today.getFullYear();
-            endDisplay.value = `${day}/${month}/${year}`;
-            document.getElementById('endDate').value = `${year}-${month}-${day}`;
-            
-            renderEndCalendar();
-            if (endPicker) endPicker.classList.remove('show');
-        });
-    }
-
-    // Filter type toggle
-    const filterType = document.getElementById('filterType');
-    const bulanFilterGroup = document.getElementById('bulanFilterGroup');
-    const tahunFilterGroup = document.getElementById('tahunFilterGroup');
-    const periodeFilterGroup = document.getElementById('periodeFilterGroup');
-
-    function toggleFilterGroups() {
-        if (filterType.value === 'periode') {
-            if (bulanFilterGroup) bulanFilterGroup.style.display = 'none';
-            if (tahunFilterGroup) tahunFilterGroup.style.display = 'none';
-            if (periodeFilterGroup) periodeFilterGroup.style.display = 'block';
-        } else {
-            if (bulanFilterGroup) bulanFilterGroup.style.display = 'block';
-            if (tahunFilterGroup) tahunFilterGroup.style.display = 'block';
-            if (periodeFilterGroup) periodeFilterGroup.style.display = 'none';
         }
-    }
 
-    if (filterType) {
-        filterType.addEventListener('change', toggleFilterGroups);
-        toggleFilterGroups();
-    }
+        // Filter type toggle
+        const filterType = document.getElementById('filterType');
+        const bulanFilterGroup = document.getElementById('bulanFilterGroup');
+        const tahunFilterGroup = document.getElementById('tahunFilterGroup');
+        const periodeFilterGroup = document.getElementById('periodeFilterGroup');
 
-    // Handle long numbers in stat cards
-    const statValues = document.querySelectorAll('.stat-value');
-    statValues.forEach(el => {
-        const text = el.innerText;
-        if (text.length > 18) {
-            el.style.fontSize = '1.25rem';
+        function toggleFilterGroups() {
+            if (filterType.value === 'periode') {
+                if (bulanFilterGroup) bulanFilterGroup.style.display = 'none';
+                if (tahunFilterGroup) tahunFilterGroup.style.display = 'none';
+                if (periodeFilterGroup) periodeFilterGroup.style.display = 'block';
+            } else {
+                if (bulanFilterGroup) bulanFilterGroup.style.display = 'block';
+                if (tahunFilterGroup) tahunFilterGroup.style.display = 'block';
+                if (periodeFilterGroup) periodeFilterGroup.style.display = 'none';
+            }
         }
+
+        if (filterType) {
+            filterType.addEventListener('change', toggleFilterGroups);
+            toggleFilterGroups();
+        }
+
+        // Handle long numbers in stat cards
+        const statValues = document.querySelectorAll('.stat-value');
+        statValues.forEach(el => {
+            const text = el.innerText;
+            if (text.length > 18) {
+                el.style.fontSize = '1.25rem';
+            }
+        });
     });
-});
 
-function refreshPage() {
-    location.reload();
-}
+    function refreshPage() {
+        location.reload();
+    }
 
-@if(session('success'))
+    @if(session('success'))
     Swal.fire({
         icon: 'success',
         title: 'Berhasil!',
-        text: '{{ session('success') }}',
+        text: '{{ session('
+        success ') }}',
         toast: true,
         position: 'top-end',
         showConfirmButton: false,
         timer: 3000,
         timerProgressBar: true
     });
-@endif
+    @endif
 
-@if(session('error'))
+    @if(session('error'))
     Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: '{{ session('error') }}',
+        text: '{{ session('
+        error ') }}',
         confirmButtonText: 'OK'
     });
-@endif
+    @endif
 
-@if(session('warning'))
+    @if(session('warning'))
     Swal.fire({
         icon: 'warning',
         title: 'Perhatian',
-        text: '{{ session('warning') }}',
+        text: '{{ session('
+        warning ') }}',
         confirmButtonText: 'OK'
     });
-@endif
+    @endif
 
-@if($errors->any())
+    @if($errors - > any())
     Swal.fire({
         icon: 'error',
         title: 'Terjadi Kesalahan',
         html: '<ul class="text-start mb-0">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>',
         confirmButtonText: 'OK'
     });
-@endif
+    @endif
 </script>
 @endpush

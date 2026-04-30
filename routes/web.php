@@ -17,6 +17,7 @@ use App\Http\Controllers\SchoolSettingController;
 use App\Http\Controllers\RealisasiController;
 use App\Http\Controllers\LicenseLookupController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\MutationEvidenceController;
 use Illuminate\Support\Facades\Route;
 
 // ================================================================
@@ -160,6 +161,23 @@ Route::middleware(['auth', 'license.active', 'role:admin'])->group(function () {
     Route::get('/invoice/{id}/edit', [InvoiceController::class, 'edit'])->name('invoice.edit');
     Route::put('/invoice/{id}', [InvoiceController::class, 'update'])->name('invoice.update');
     Route::delete('/invoice/{id}', [InvoiceController::class, 'destroy'])->name('invoice.destroy');
+
+    Route::prefix('mutation-evidence')->name('mutation-evidence.')->group(function () {
+
+        Route::get('/',           [MutationEvidenceController::class, 'index'])->name('index');
+        Route::get('/create',     [MutationEvidenceController::class, 'create'])->name('create');
+        Route::post('/',          [MutationEvidenceController::class, 'store'])->name('store');
+        Route::get('/{mutationEvidence}',       [MutationEvidenceController::class, 'show'])->name('show');
+        Route::get('/{mutationEvidence}/edit',  [MutationEvidenceController::class, 'edit'])->name('edit');
+        Route::put('/{mutationEvidence}',       [MutationEvidenceController::class, 'update'])->name('update');
+        Route::delete('/{mutationEvidence}',    [MutationEvidenceController::class, 'destroy'])->name('destroy');
+
+        // Cetak
+        Route::get('/print/preview', [MutationEvidenceController::class, 'print'])->name('print');
+
+        // AJAX – generate nomor bukti
+        Route::get('/api/generate-number', [MutationEvidenceController::class, 'generateNumber'])->name('generate-number');
+    });
 });
 
 // ================================================================

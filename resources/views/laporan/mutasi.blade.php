@@ -152,6 +152,19 @@
                     </div>
                 </form>
             </div>
+            <div class="row mt-2">
+                <div class="col-12">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox"
+                            name="with_evidences" id="withEvidences" value="1"
+                            {{ request('with_evidences') ? 'checked' : '' }}>
+                        <label class="form-check-label" for="withEvidences">
+                            <i class="feather-paperclip me-1 text-muted"></i>
+                            Sertakan Bukti Mutasi dalam Laporan
+                        </label>
+                    </div>
+                </div>
+            </div>
         </div>
 
         @if ($startDate && $endDate)
